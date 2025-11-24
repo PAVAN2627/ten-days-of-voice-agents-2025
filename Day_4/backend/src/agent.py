@@ -84,36 +84,53 @@ def save_state(state: Dict[str, Any]):
         logger.error("Failed to save state: %s", e)
 
 # -----------------------
-# Wrapper for dynamic voice switching
+# Voice switching helper
 # -----------------------
-class DynamicMurfTTS:
-    """Wrapper around Murf TTS that allows voice switching at runtime"""
-    def __init__(self, initial_voice: str = VOICE_LEARN):
-        self.current_voice = initial_voice
-        self.tts = murf.TTS(
-            voice=self.current_voice,
+def switch_session_voice(session: AgentSession, new_voice: str):
+    """Switch the session's TTS voice by replacing the TTS instance"""
+    try:
+        logger.info(f"🎤 Switching session voice to: {new_voice}")
+        logger.info(f"Session type: {type(session)}")
+        logger.info(f"Session attributes: {[attr for attr in dir(session) if 'tts' in attr.lower()]}")
+        
+        new_tts = murf.TTS(
+            voice=new_voice,
             style="Conversation",
             text_pacing=True
         )
-    
-    async def synthesize(self, text: str, *args, **kwargs):
-        """Delegate to underlying TTS"""
-        return await self.tts.synthesize(text, *args, **kwargs)
-    
-    def switch_voice(self, new_voice: str):
-        """Switch to a new voice by recreating the TTS instance"""
-        if new_voice != self.current_voice:
-            logger.info(f"🎤 Voice switching: {self.current_voice} → {new_voice}")
-            self.current_voice = new_voice
-            self.tts = murf.TTS(
-                voice=new_voice,
-                style="Conversation",
-                text_pacing=True
-            )
-    
-    def __getattr__(self, name):
-        """Delegate all other attributes to the underlying TTS"""
-        return getattr(self.tts, name)
+        
+        # Try multiple ways to replace TTS
+        updated = False
+        if hasattr(session, '_tts'):
+            old_tts = getattr(session, '_tts', None)
+            session._tts = new_tts
+            logger.info(f"Updated session._tts from {old_tts} to {new_tts}")
+            updated = True
+            
+        if hasattr(session, 'tts'):
+            old_tts = getattr(session, 'tts', None)
+            session.tts = new_tts
+            logger.info(f"Updated session.tts from {old_tts} to {new_tts}")
+            updated = True
+        
+        # Force update internal TTS references
+        try:
+            if hasattr(session, '_agent_output') and hasattr(session._agent_output, '_tts'):
+                session._agent_output._tts = new_tts
+                logger.info("Updated session._agent_output._tts")
+                updated = True
+        except Exception as e:
+            logger.warning(f"Could not update _agent_output._tts: {e}")
+            
+        if updated:
+            logger.info(f"✓ Session voice switched to {new_voice}")
+        else:
+            logger.warning("No TTS attributes found to update")
+            
+        return updated
+    except Exception as e:
+        logger.error(f"Voice switch failed: {e}", exc_info=True)
+        return False
 
 # -----------------------
 # Small evaluation helpers
@@ -163,17 +180,7 @@ async def set_concept(ctx: RunContext[dict], concept_id: str):
     save_state(state)
     return f"Concept set to: {match.get('title', cid)}"
 
-@function_tool
-async def set_mode(ctx: RunContext[dict], mode: str):
-    """Change the learning mode: 'learn' (explanation), 'quiz' (questions), or 'teach_back' (student teaches)."""
-    m = (mode or "").strip().lower()
-    if m not in ("learn", "quiz", "teach_back"):
-        return "Unknown mode. Choose 'learn', 'quiz', or 'teach_back'."
-    ctx.userdata["tutor"]["mode"] = m
-    state = load_state()
-    state["last_mode"] = m
-    save_state(state)
-    return f"Mode set to: {m}"
+
 
 @function_tool
 async def explain_concept(ctx: RunContext[dict]):
@@ -324,133 +331,265 @@ async def get_mastery_report(ctx: RunContext[dict]):
         lines.append(f"{cid}: last={info.get('last_score')}, avg={info.get('avg_score')}, taught_back={info.get('times_taught_back')}, quizzed={info.get('times_quizzed')}")
     return "Mastery:\n" + "\n".join(lines)
 
-# -----------------------
-# Tutor Agent
-# -----------------------
-class TutorAgent(Agent):
-    def __init__(self, content: List[dict], dynamic_tts=None):
-        instructions = """You are an Active Recall Tech Tutor.
 
-Your role: Help students learn programming concepts through three modes: learn (explanation), quiz (questions), and teach-back (student explains).
 
-When user wants to see concepts or says "list"/"show"/"concepts":
-1. Call list_concepts() to get available concepts
-2. Present them and ask: "Which concept would you like to work with?"
+# -----------------------
+# Specialized Agents for Each Mode
+# -----------------------
+class MainTutorAgent(Agent):
+    """Main coordinator agent that handles concept selection and mode handoffs"""
+    def __init__(self, content: List[dict]):
+        instructions = """You are the Main Active Recall Tech Tutor Coordinator.
+
+Your role: Help students select programming concepts and learning modes, then transfer them to specialized tutors.
+
+When user wants to see concepts:
+1. Call list_concepts() to show available topics
+2. Ask: "Which concept would you like to work with?"
 
 When user selects a concept:
-1. Call set_concept(concept_id)
-2. Ask: "Would you like to learn, take a quiz, or teach-back this concept?"
+1. Call set_concept(concept_id) 
+2. Ask: "Which learning mode would you prefer?"
+   - Learn mode: I'll explain the concept clearly
+   - Quiz mode: I'll test you with questions  
+   - Teach-back mode: You explain it to me
 
-When user chooses a mode (learn/quiz/teach_back):
-1. Call set_mode(mode)
-2. Execute that mode
-
-THREE MODES:
-- learn: Explain concept. Call explain_concept()
-- quiz: Ask multiple-choice question. Call get_mcq() → wait for answer → call evaluate_mcq()
-- teach_back: Ask student to explain. Call evaluate_teachback()
+When user chooses a mode:
+1. Call the appropriate transfer function
+2. The specialized tutor will take over
 
 RULES:
-- NEVER list concepts yourself - always use list_concepts tool
-- Keep responses SHORT and conversational
-- When user picks concept → call set_concept() immediately
-- When user picks mode → call set_mode() immediately
-- After quiz question → wait for answer
-- DO NOT repeat concept names twice
-
-PRIORITY:
-1. list/show/concepts keyword → call list_concepts()
-2. User picks concept → call set_concept()
-3. User picks mode → call set_mode()
-4. Always use tools, never make up responses."""
+- ALWAYS use list_concepts tool, never list yourself
+- Keep responses SHORT and friendly
+- Transfer immediately when mode is chosen
+- Focus on coordination, not teaching"""
 
         super().__init__(
             instructions=instructions,
             tools=[
                 list_concepts,
-                set_concept,
-                set_mode,
-                explain_concept,
-                get_mcq,
-                evaluate_mcq,
-                evaluate_teachback,
+                set_concept, 
+                self.transfer_to_learn_mode,
+                self.transfer_to_quiz_mode,
+                self.transfer_to_teachback_mode,
                 get_mastery_report
             ]
         )
+        self.content = content
         self._session = None
-        self._dynamic_tts = dynamic_tts  # Store reference to dynamic TTS wrapper
     
-    async def on_message(self, message) -> None:
-        """Intercept messages to handle voice switching and list requests"""
-        try:
-            logger.info(f"🎯 on_message CALLED with message: {message}")
-            
-            # Extract message text
-            msg_text = ""
-            if hasattr(message, "text"):
-                msg_text = message.text
-                logger.info(f"   Got text from message.text: '{msg_text}'")
-            elif isinstance(message, str):
-                msg_text = message
-                logger.info(f"   Message is string: '{msg_text}'")
-            else:
-                logger.info(f"   Message type: {type(message)}, dir: {dir(message)}")
-            
-            msg_lower = msg_text.lower().strip() if msg_text else ""
-            logger.info(f"   Lowercase: '{msg_lower}'")
-            
-            # EARLY INTERCEPTION: Handle list/concept requests BEFORE LLM
-            if self._session:
-                concept_id = self._session.userdata.get("tutor", {}).get("concept_id")
-                
-                # Intercept list requests
-                list_keywords = ["list", "show", "see", "all", "available", "concepts", "have you"]
-                if any(kw in msg_lower for kw in list_keywords) and not concept_id:
-                    logger.info(f"⚡ EARLY INTERCEPT: List request in '{msg_lower}'")
-                    result = await self._session.call_tool("list_concepts")
-                    await self._session.send_text(f"Here are the concepts:\n{result}")
-                    return
-                
-                # Intercept affirmations
-                if msg_lower in ["yes", "yeah", "ok", "okay", "sure", "please"] and not concept_id:
-                    logger.info(f"⚡ EARLY INTERCEPT: Affirmation '{msg_lower}'")
-                    result = await self._session.call_tool("list_concepts")
-                    await self._session.send_text(f"Here are the concepts:\n{result}")
-                    return
-            
-            logger.info(f"   No early intercept, calling parent LLM")
-            # Call parent LLM for normal processing
-            await super().on_message(message)
-            
-            # After parent processing, check if mode changed and switch voice
-            if self._session and self._dynamic_tts:
-                new_mode = self._session.userdata.get("tutor", {}).get("mode")
-                if new_mode:
-                    logger.info(f"🎤 on_message detected mode: {new_mode}")
-                    await self._switch_voice(new_mode)
-        except Exception as e:
-            logger.error(f"Error in on_message: {e}", exc_info=True)
+    async def on_enter(self) -> None:
+        """Greeting when agent starts"""
+        greeting = (
+            "Hello! I'm your Tech Tutor Coordinator. I'll help you master programming concepts through active learning. "
+            "We have three specialized tutors: Learn (explanations), Quiz (questions), and Teach-Back (you explain). "
+            "Which programming concept would you like to start with? Say 'list concepts' to see all topics."
+        )
+        await self.session.send_text(greeting)
     
-    async def _switch_voice(self, mode: str) -> None:
-        """Switch voice for the given mode using the dynamic TTS wrapper"""
-        try:
-            if not self._dynamic_tts:
-                return
+    @function_tool
+    async def transfer_to_learn_mode(self, ctx: RunContext[dict]):
+        """Transfer to Learn Mode tutor for concept explanations"""
+        concept_id = ctx.userdata["tutor"].get("concept_id")
+        if not concept_id:
+            return "Please select a concept first using set_concept."
+        
+        ctx.userdata["tutor"]["mode"] = "learn"
+        return LearnModeAgent(self.content), "Transferring to Learn Mode tutor with Matthew's voice"
+    
+    @function_tool 
+    async def transfer_to_quiz_mode(self, ctx: RunContext[dict]):
+        """Transfer to Quiz Mode tutor for interactive questions"""
+        concept_id = ctx.userdata["tutor"].get("concept_id")
+        if not concept_id:
+            return "Please select a concept first using set_concept."
             
-            voice_map = {
-                "learn": VOICE_LEARN,
-                "quiz": VOICE_QUIZ,
-                "teach_back": VOICE_TEACH,
-            }
+        ctx.userdata["tutor"]["mode"] = "quiz"
+        return QuizModeAgent(self.content), "Transferring to Quiz Mode tutor with Anusha's voice"
+    
+    @function_tool
+    async def transfer_to_teachback_mode(self, ctx: RunContext[dict]):
+        """Transfer to Teach-Back Mode tutor for student explanations"""
+        concept_id = ctx.userdata["tutor"].get("concept_id")
+        if not concept_id:
+            return "Please select a concept first using set_concept."
             
-            voice = voice_map.get(mode, VOICE_LEARN)
-            logger.info(f"🎤 Switching to {voice} for mode {mode}")
-            
-            # Use the wrapper's switch_voice method
-            self._dynamic_tts.switch_voice(voice)
-            logger.info(f"✓ Voice switched to {voice}")
-        except Exception as e:
-            logger.error(f"Voice switch error: {e}", exc_info=True)
+        ctx.userdata["tutor"]["mode"] = "teach_back" 
+        return TeachBackModeAgent(self.content), "Transferring to Teach-Back Mode tutor with Ken's voice"
+
+class LearnModeAgent(Agent):
+    """Specialized agent for Learn Mode with Matthew's voice"""
+    def __init__(self, content: List[dict]):
+        instructions = """You are Matthew, the Learn Mode Tutor. Your voice is warm and explanatory.
+
+Your role: Provide clear, detailed explanations of programming concepts.
+
+When you enter:
+1. Greet warmly and explain the selected concept
+2. Use explain_concept() to get the content
+3. Provide additional examples and clarifications
+4. Ask if they want to switch modes or select a new concept
+
+Style: 
+- Warm, patient, and thorough
+- Use analogies and examples
+- Encourage questions
+- Offer to switch to quiz or teach-back mode"""
+
+        super().__init__(
+            instructions=instructions,
+            tools=[
+                explain_concept,
+                self.return_to_main,
+                self.switch_to_quiz,
+                self.switch_to_teachback
+            ]
+        )
+        self.content = content
+        self._session = None
+    
+    async def on_enter(self) -> None:
+        """Switch voice and start explaining"""
+        if self._session:
+            switch_session_voice(self._session, VOICE_LEARN)
+        
+        await self.session.send_text("Hi! I'm Matthew, your Learn Mode tutor. Let me explain this concept clearly for you.")
+        # Automatically explain the concept
+        await self.session.call_tool("explain_concept")
+        await self.session.send_text("Would you like me to explain more, or shall we try a quiz or teach-back session?")
+    
+    @function_tool
+    async def return_to_main(self, ctx: RunContext[dict]):
+        """Return to main coordinator to select new concept"""
+        return MainTutorAgent(self.content), "Returning to main tutor for concept selection"
+    
+    @function_tool
+    async def switch_to_quiz(self, ctx: RunContext[dict]):
+        """Switch to quiz mode for the same concept"""
+        return QuizModeAgent(self.content), "Switching to Quiz Mode"
+    
+    @function_tool
+    async def switch_to_teachback(self, ctx: RunContext[dict]):
+        """Switch to teach-back mode for the same concept"""
+        return TeachBackModeAgent(self.content), "Switching to Teach-Back Mode"
+
+class QuizModeAgent(Agent):
+    """Specialized agent for Quiz Mode with Anusha's voice"""
+    def __init__(self, content: List[dict]):
+        instructions = """You are Anusha, the Quiz Mode Tutor. Your voice is engaging and questioning.
+
+Your role: Test students with multiple-choice questions and provide feedback.
+
+When you enter:
+1. Greet energetically and start a quiz
+2. Use get_mcq() to get questions
+3. Wait for answers and use evaluate_mcq() to score
+4. Provide encouraging feedback
+5. Offer more questions or mode switches
+
+Style:
+- Energetic and encouraging
+- Celebrate correct answers
+- Provide helpful hints for wrong answers
+- Keep the energy high"""
+
+        super().__init__(
+            instructions=instructions,
+            tools=[
+                get_mcq,
+                evaluate_mcq,
+                self.return_to_main,
+                self.switch_to_learn,
+                self.switch_to_teachback
+            ]
+        )
+        self.content = content
+        self._session = None
+    
+    async def on_enter(self) -> None:
+        """Switch voice and start quiz"""
+        if self._session:
+            switch_session_voice(self._session, VOICE_QUIZ)
+        
+        await self.session.send_text("Hey there! I'm Anusha, your Quiz Mode tutor. Ready for some questions? Let's test your knowledge!")
+        # Automatically start with a question
+        result = await self.session.call_tool("get_mcq")
+        if isinstance(result, dict) and not result.get("error"):
+            await self.session.send_text(f"Here's your question: {result['question']}")
+            for i, option in enumerate(result['options']):
+                await self.session.send_text(f"{chr(65+i)}) {option}")
+            await self.session.send_text("What's your answer?")
+    
+    @function_tool
+    async def return_to_main(self, ctx: RunContext[dict]):
+        """Return to main coordinator"""
+        return MainTutorAgent(self.content), "Returning to main tutor"
+    
+    @function_tool
+    async def switch_to_learn(self, ctx: RunContext[dict]):
+        """Switch to learn mode"""
+        return LearnModeAgent(self.content), "Switching to Learn Mode"
+    
+    @function_tool
+    async def switch_to_teachback(self, ctx: RunContext[dict]):
+        """Switch to teach-back mode"""
+        return TeachBackModeAgent(self.content), "Switching to Teach-Back Mode"
+
+class TeachBackModeAgent(Agent):
+    """Specialized agent for Teach-Back Mode with Ken's voice"""
+    def __init__(self, content: List[dict]):
+        instructions = """You are Ken, the Teach-Back Mode Tutor. Your voice is encouraging and feedback-focused.
+
+Your role: Listen to student explanations and provide constructive feedback.
+
+When you enter:
+1. Greet supportively and ask for explanation
+2. Listen carefully to their explanation
+3. Use evaluate_teachback() to score and provide feedback
+4. Offer encouragement and suggestions
+5. Ask if they want to try again or switch modes
+
+Style:
+- Supportive and patient
+- Focus on constructive feedback
+- Encourage effort and improvement
+- Help build confidence"""
+
+        super().__init__(
+            instructions=instructions,
+            tools=[
+                evaluate_teachback,
+                self.return_to_main,
+                self.switch_to_learn,
+                self.switch_to_quiz
+            ]
+        )
+        self.content = content
+        self._session = None
+    
+    async def on_enter(self) -> None:
+        """Switch voice and prompt for explanation"""
+        if self._session:
+            switch_session_voice(self._session, VOICE_TEACH)
+        
+        await self.session.send_text("Hello! I'm Ken, your Teach-Back tutor. I'd love to hear you explain the concept in your own words. This helps reinforce your learning. Please go ahead and explain what you understand about this topic.")
+    
+    @function_tool
+    async def return_to_main(self, ctx: RunContext[dict]):
+        """Return to main coordinator"""
+        return MainTutorAgent(self.content), "Returning to main tutor"
+    
+    @function_tool
+    async def switch_to_learn(self, ctx: RunContext[dict]):
+        """Switch to learn mode"""
+        return LearnModeAgent(self.content), "Switching to Learn Mode"
+    
+    @function_tool
+    async def switch_to_quiz(self, ctx: RunContext[dict]):
+        """Switch to Quiz Mode"""
+        return QuizModeAgent(self.content), "Switching to Quiz Mode"
+    
+
 
 # -----------------------
 # Prewarm function
@@ -485,21 +624,18 @@ async def entrypoint(ctx: JobContext):
         "history": []
     }
 
-    # Create dynamic TTS wrapper that allows voice switching
-    dynamic_tts = DynamicMurfTTS(initial_voice=VOICE_LEARN)
-
-    # Create session
+    # Create session with initial TTS
     session = AgentSession(
         stt=deepgram.STT(model="nova-3"),
         llm=google.LLM(model="gemini-2.5-flash", api_key=os.getenv("GOOGLE_API_KEY")),
-        tts=dynamic_tts,
+        tts=murf.TTS(voice=VOICE_LEARN, style="Conversation", text_pacing=True),
         turn_detection=MultilingualModel(),
         vad=ctx.proc.userdata.get("vad"),
         userdata=userdata,
     )
 
-    # Create agent
-    agent = TutorAgent(content, dynamic_tts=dynamic_tts)
+    # Create main coordinator agent
+    agent = MainTutorAgent(content)
     agent._session = session  # Pass session to agent for voice switching
 
     # Start session (MUST complete before event handlers are registered)
@@ -511,127 +647,8 @@ async def entrypoint(ctx: JobContext):
         )
     )
 
-    # Register event handlers AFTER session.start() completes
-    
-    @session.on("tool_called")
-    def _tool_called_handler(ev):
-        """Switch voice when mode changes"""
-        try:
-            # Extract tool name and mode argument
-            tool_name = None
-            mode = None
-            
-            # Try different attribute patterns for tool name
-            if hasattr(ev, "tool") and hasattr(ev.tool, "name"):
-                tool_name = ev.tool.name
-            elif hasattr(ev, "name"):
-                tool_name = ev.name
-            elif isinstance(ev, dict):
-                tool_name = ev.get("tool_name") or ev.get("name")
-            
-            # Extract mode argument
-            if hasattr(ev, "arguments"):
-                mode = ev.arguments.get("mode") if isinstance(ev.arguments, dict) else None
-            elif hasattr(ev, "args"):
-                mode = ev.args.get("mode") if isinstance(ev.args, dict) else None
-            elif isinstance(ev, dict) and "arguments" in ev:
-                mode = ev["arguments"].get("mode") if isinstance(ev["arguments"], dict) else None
-            
-            if tool_name and "set_mode" in str(tool_name).lower() and mode:
-                logger.info(f"🎤 Tool called: set_mode({mode})")
-
-                # Map modes to voices
-                voice_map = {
-                    "learn": VOICE_LEARN,
-                    "quiz": VOICE_QUIZ,
-                    "teach_back": VOICE_TEACH,
-                }
-
-                voice = voice_map.get(mode, VOICE_LEARN)
-
-                # Switch voice using the wrapper
-                dynamic_tts.switch_voice(voice)
-                logger.info(f"✓ Voice switched to {voice}")
-        except Exception as e:
-            logger.error(f"Error in tool_called handler: {e}", exc_info=True)
-
-    @session.on("received_text")
-    async def _text_received_handler(ev):
-        """Quick responses without LLM for common commands"""
-        try:
-            # Extract text from event
-            text = None
-            if hasattr(ev, "text"):
-                text = ev.text
-            elif isinstance(ev, str):
-                text = ev
-            elif isinstance(ev, dict):
-                text = ev.get("text")
-            
-            if not text:
-                return
-            
-            text_lower = text.lower().strip()
-            logger.info(f"📝 User said: '{text_lower}'")
-
-            if not text_lower:
-                return
-
-            # Get current state
-            concept_id = session.userdata["tutor"].get("concept_id")
-            mode = session.userdata["tutor"].get("mode")
-
-            # Quick affirmation → list concepts
-            if text_lower in ["yes", "yeah", "ok", "okay", "sure", "please"] and not concept_id:
-                logger.info("⚡ Quick path: Affirmation → list_concepts")
-                result = await session.call_tool("list_concepts")
-                await session.send_text(f"Here are the concepts:\n{result}")
-                return
-
-            # List request → list concepts (more aggressive matching)
-            list_keywords = ["list", "show", "see", "all", "available", "concepts", "have you"]
-            if any(word in text_lower for word in list_keywords) and not concept_id:
-                logger.info(f"⚡ Quick path: List request detected in '{text_lower}'")
-                result = await session.call_tool("list_concepts")
-                await session.send_text(f"Here are the concepts:\n{result}")
-                return
-
-        except Exception as e:
-            logger.error(f"Error in text handler: {e}", exc_info=True)
-
-    @session.on("user_speech_committed")
-    async def _user_speech_handler(message: str):
-        """Intercept user speech IMMEDIATELY after STT, before LLM"""
-        try:
-            logger.info(f"🎙️ User speech committed: '{message}'")
-            msg_lower = message.lower().strip()
-            
-            concept_id = session.userdata.get("tutor", {}).get("concept_id")
-            
-            # List request - intercept BEFORE LLM
-            list_keywords = ["list", "show", "see", "all", "available", "concepts", "share", "need"]
-            if any(kw in msg_lower for kw in list_keywords) and not concept_id:
-                logger.info(f"⚡ SPEECH INTERCEPT: List request detected")
-                result = await session.call_tool("list_concepts")
-                await session.send_text(f"Here are the concepts:\n{result}")
-                # CRITICAL: We need to prevent LLM from being called
-                # This might not work depending on LiveKit version
-                return
-            
-        except Exception as e:
-            logger.error(f"Error in user_speech handler: {e}", exc_info=True)
-
-    # Send greeting AFTER session.start() and handlers registered
-    greeting = (
-        "Hello! I'm your Tech Tutor. I have important programming concepts to help you master. "
-        "We can learn through three modes: "
-        "Learn mode — I explain the concept clearly, "
-        "Quiz mode — I ask you multiple-choice questions, and "
-        "Teach-Back mode — You explain the concept back to me for feedback. "
-        "Which programming concept would you like to start with? "
-        "You can say a concept name or say 'list' to hear all available concepts."
-    )
-    await session.send_text(greeting)
+    # Pass session reference to all agents for voice switching
+    agent._session = session
 
     # Connect to room
     await ctx.connect()
