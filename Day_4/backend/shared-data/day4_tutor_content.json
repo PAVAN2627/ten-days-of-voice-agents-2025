@@ -1,0 +1,202 @@
+[
+  {
+    "id": "variables",
+    "title": "Variables",
+    "summary": "Variables store values so you can reuse them later. Think of them as labeled boxes that hold information your program needs.",
+    "sample_question": "What is a variable and why is it useful?",
+    "mcq": [
+      {
+        "question": "What best describes a variable?",
+        "options": [
+          "A repeating block of code.",
+          "A label used to store data.",
+          "A built-in debugging tool.",
+          "A permanent unchangeable value."
+        ],
+        "answer": 1
+      },
+      {
+        "question": "Which statement is true about variables?",
+        "options": [
+          "They cannot change once assigned.",
+          "They store data that can be reused.",
+          "They are used only for loops.",
+          "They store only numbers."
+        ],
+        "answer": 1
+      },
+      {
+        "question": "Which of the following is a valid reason to use variables?",
+        "options": [
+          "To make code longer.",
+          "To avoid loops.",
+          "To store and reuse values.",
+          "To prevent user input."
+        ],
+        "answer": 2
+      },
+      {
+        "question": "If x = 10 and y = x + 5, what is the value of y?",
+        "options": ["5", "10", "15", "20"],
+        "answer": 2
+      },
+      {
+        "question": "Which of the following is a valid variable name?",
+        "options": ["1name", "user-name", "full_name", "class"],
+        "answer": 2
+      }
+    ]
+  },
+
+  {
+    "id": "loops",
+    "title": "Loops",
+    "summary": "Loops let you repeat an action multiple times until a condition is met. Common types include for loops and while loops.",
+    "sample_question": "Explain the difference between a for loop and a while loop.",
+    "mcq": [
+      {
+        "question": "What is the main purpose of a loop?",
+        "options": [
+          "To store data.",
+          "To repeat actions multiple times.",
+          "To stop a program.",
+          "To convert text to numbers."
+        ],
+        "answer": 1
+      },
+      {
+        "question": "Which loop runs as long as a condition is true?",
+        "options": ["for loop", "while loop", "switch loop", "repeat loop"],
+        "answer": 1
+      },
+      {
+        "question": "Which loop is best for repeating a known number of times?",
+        "options": ["while", "for", "if-else", "match-case"],
+        "answer": 1
+      },
+      {
+        "question": "What happens if a loop condition never becomes false?",
+        "options": [
+          "The program stops immediately.",
+          "You get a syntax error.",
+          "An infinite loop occurs.",
+          "The loop runs only once."
+        ],
+        "answer": 2
+      },
+      {
+        "question": "What does 'i += 1' inside a loop represent?",
+        "options": [
+          "Multiply i by 1",
+          "Reset i to 1",
+          "Decrease i",
+          "Increase i by 1"
+        ],
+        "answer": 3
+      }
+    ]
+  },
+
+  {
+    "id": "functions",
+    "title": "Functions",
+    "summary": "Functions are reusable blocks of code that perform a specific task. They help organize programs, avoid repetition, and make code more readable. A function is executed when it is called.",
+    "sample_question": "What is the advantage of using functions?",
+    "mcq": [
+      {
+        "question": "What is a function?",
+        "options": [
+          "A data storage container.",
+          "A reusable block of code.",
+          "A loop control statement.",
+          "An error-handling mechanism."
+        ],
+        "answer": 1
+      },
+      {
+        "question": "Why are functions useful?",
+        "options": [
+          "They make code harder to read.",
+          "They force infinite loops.",
+          "They allow code reuse and better organization.",
+          "They remove conditional logic."
+        ],
+        "answer": 2
+      },
+      {
+        "question": "What is it called when a function is executed?",
+        "options": ["Naming", "Looping", "Calling", "Declaring"],
+        "answer": 2
+      },
+      {
+        "question": "Which of these defines a function in Python?",
+        "options": [
+          "define myFunction:",
+          "func myFunction:",
+          "create myFunction()",
+          "def myFunction():"
+        ],
+        "answer": 3
+      },
+      {
+        "question": "What does a return statement do?",
+        "options": [
+          "Ends the program.",
+          "Sends a value back from the function.",
+          "Starts a loop.",
+          "Declares a variable."
+        ],
+        "answer": 1
+      }
+    ]
+  },
+
+  {
+    "id": "conditions",
+    "title": "Conditions",
+    "summary": "Conditions help your program decide what to do based on whether something is true or false. They typically use if, elif, and else to choose between different paths.",
+    "sample_question": "Explain how conditions help programs make decisions.",
+    "mcq": [
+      {
+        "question": "What is the purpose of an if statement?",
+        "options": [
+          "To repeat code.",
+          "To check a condition and make decisions.",
+          "To store values.",
+          "To define a function."
+        ],
+        "answer": 1
+      },
+      {
+        "question": "Which operator is used for equality comparison?",
+        "options": ["=", "==", "===", "<>"],
+        "answer": 1
+      },
+      {
+        "question": "What does else represent?",
+        "options": [
+          "Runs when the if condition is true.",
+          "Runs when none of the conditions are true.",
+          "Starts a new loop.",
+          "Creates a new variable."
+        ],
+        "answer": 1
+      },
+      {
+        "question": "Which of these evaluates to True?",
+        "options": ["5 > 10", "3 == 7", "4 < 9", "2 >= 9"],
+        "answer": 2
+      },
+      {
+        "question": "What does elif mean?",
+        "options": [
+          "Else if",
+          "Else loop",
+          "Every loop",
+          "End line"
+        ],
+        "answer": 0
+      }
+    ]
+  }
+]
