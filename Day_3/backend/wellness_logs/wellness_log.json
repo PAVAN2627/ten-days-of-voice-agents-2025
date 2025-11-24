@@ -1,10 +1,22 @@
 [
     {
-        "timestamp": "2025-11-23T18:16:43.956134Z",
-        "mood": "good",
-        "energy": "Average",
+        "timestamp": "2025-11-24T12:14:49.137793Z",
+        "mood": "okay",
+        "energy": "medium",
         "stress": "No stress reported",
-        "goals": [],
-        "summary": "Mood: good. Energy: Average. Stress: No stress reported. Goals: none."
+        "goals": [
+            "finish my pending college tasks"
+        ],
+        "summary": "Mood: okay. Energy: medium. Stress: No stress reported. Goals: finish my pending college tasks."
+    },
+    {
+        "timestamp": "2025-11-24T12:17:26.641475Z",
+        "mood": "Very low",
+        "energy": "very low",
+        "stress": "No stress reported",
+        "goals": [
+            "relax and listen to music"
+        ],
+        "summary": "Mood: Very low. Energy: very low. Stress: No stress reported. Goals: relax and listen to music."
     }
 ]

@@ -1,9 +1,12 @@
+# src/agent.py
 import logging
 import json
 import os
 from datetime import datetime
 from dataclasses import dataclass, field
 from typing import Optional, List, Annotated
+
+import requests
 
 from dotenv import load_dotenv
 from pydantic import Field
@@ -26,9 +29,9 @@ from livekit.plugins import google, murf, deepgram, silero, noise_cancellation
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
 logger = logging.getLogger("agent")
-load_dotenv(".env.local")
+load_dotenv(".env.local")  # load TODOIST_API_TOKEN / TODOIST_PROJECT_ID if present
 
-print("\n========== DAY 3 WELLNESS AGENT (FINAL) LOADED ==========\n")
+print("\n========== DAY 3 WELLNESS AGENT (TODOIST MCP) LOADED ==========\n")
 
 # -----------------------
 # Data models
@@ -95,79 +98,127 @@ def save_entry(entry: WellnessEntry) -> None:
         with open(path, "w", encoding="utf-8") as f:
             json.dump(history, f, indent=4, ensure_ascii=False)
 
-        print(f"\n✅ Wellness entry saved: {path}")
+        print(f"\n✅ Wellness entry saved locally: {path}")
         print(json.dumps(entry.__dict__, indent=2, ensure_ascii=False))
     except Exception as e:
         print(f"\n❌ ERROR saving entry: {e}")
         raise
 
 # -----------------------
-# Advice generator
+# Todoist integration (Option A: push every check-in)
+# -----------------------
+TODOIST_API_TOKEN = os.getenv("TODOIST_API_TOKEN")
+TODOIST_PROJECT_ID = os.getenv("TODOIST_PROJECT_ID")  # should be numeric string
+
+def todoist_headers():
+    return {
+        "Authorization": f"Bearer {TODOIST_API_TOKEN}",
+        "Content-Type": "application/json",
+    }
+
+def create_todoist_task(content: str, project_id: Optional[str] = None, parent_id: Optional[str] = None) -> dict:
+    """
+    Create a Todoist task. Returns parsed JSON on success.
+    """
+    url = "https://api.todoist.com/rest/v2/tasks"
+    payload = {"content": content}
+    if project_id:
+        # API expects numeric project_id
+        try:
+            payload["project_id"] = int(project_id)
+        except Exception:
+            # if conversion fails, omit project_id and let task be created in default project (not recommended)
+            pass
+    if parent_id:
+        payload["parent_id"] = parent_id
+
+    resp = requests.post(url, headers=todoist_headers(), json=payload, timeout=10)
+    resp.raise_for_status()
+    return resp.json()
+
+def push_checkin_to_todoist(entry: WellnessEntry) -> dict:
+    """
+    Push the check-in to Todoist:
+    - Create a parent task with the check-in summary
+    - Create child tasks for each goal (if any)
+    Returns a dict with status info.
+    """
+    if not TODOIST_API_TOKEN:
+        return {"status": "skipped", "reason": "TODOIST_API_TOKEN not set"}
+
+    result = {"created": [], "errors": []}
+    try:
+        # Parent task content
+        timestamp_short = entry.timestamp.replace("T", " ").replace("Z", "")
+        parent_content = f"Wellness check-in ({timestamp_short}) — {entry.summary}"
+        parent = create_todoist_task(parent_content, project_id=TODOIST_PROJECT_ID)
+        parent_id = parent.get("id")
+        result["created"].append({"parent": parent})
+
+        # Create a child task for each goal
+        for g in entry.goals:
+            try:
+                child_content = f"Goal: {g}"
+                child = create_todoist_task(child_content, project_id=TODOIST_PROJECT_ID, parent_id=parent_id)
+                result["created"].append({"child": child})
+            except Exception as e:
+                result["errors"].append({"goal": g, "error": str(e)})
+
+        return {"status": "ok", "detail": result}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
+# -----------------------
+# Advice generator (original)
 # -----------------------
 def generate_original_advice(mood: str, energy: str, stress: str, goals: List[str]) -> str:
-    """
-    Create an original, contextual, emotionally-supportive advice paragraph.
-    The wording is constructed programmatically each time (not strict templates).
-    """
-    # normalize keywords
     m = (mood or "").strip().lower()
     e = (energy or "").strip().lower()
     s = (stress or "").strip().lower()
     g = [str(x).strip() for x in (goals or [])]
 
     parts: List[str] = []
+    parts.append("Thanks for sharing — I hear you.")
 
-    # Start reflection line (unique)
-    parts.append("Thanks for sharing—I've taken that in.")
-
-    # If mood low / words indicating low
     low_mood_keywords = ("sad", "low", "down", "bad", "unhappy", "tired", "depressed")
     stressed_keywords = ("stres", "anx", "worried", "tense", "pressure", "panic")
     positive_keywords = ("good", "happy", "great", "fine", "well", "okay", "content")
 
-    # energy handling
     if e in ("low", "low energy", "tired", "drained"):
-        parts.append("Right now your energy seems limited — that calls for gentleness.")
-        parts.append("If possible, aim for one small, doable step that won't use much energy.")
+        parts.append("Energy feels small today; be gentle with what you ask of yourself.")
+        parts.append("Pick one tiny action that feels doable and stop there if it becomes too much.")
     elif e in ("high", "high energy", "energized", "very high"):
-        parts.append("You have momentum — it could be a good moment to make a meaningful push on one thing.")
-        parts.append("Choose a clear, short chunk of work so energy helps you finish it cleanly.")
+        parts.append("You’ve got momentum — channel it into one clear, short task to use it well.")
+        parts.append("Try to keep the task bite-sized so the win comes quickly.")
     else:
-        # medium / unspecified
-        parts.append("You have steady energy; small plans and short breaks can keep that steady pace.")
+        parts.append("A steady pace will help. Little wins and short breaks suit you today.")
 
-    # mood handling
     if any(k in m for k in low_mood_keywords):
-        parts.append("Be kind to yourself today — small acts of care really do add up.")
-        parts.append("If a task feels heavy, break it into the tiniest next step and celebrate that step.")
+        parts.append("When your mood is low, gentle steps and small comforts matter more than big effort.")
+        parts.append("Consider a short, kind activity — a warm drink, a 5-minute stretch, or a pause.")
     elif any(k in m for k in positive_keywords):
-        parts.append("That positive tone is useful — consider using it to do one thing that matters to you.")
-        parts.append("A short pause to notice progress will help keep the good feeling steady.")
+        parts.append("Your positive mood can be used to do something meaningful, even if small.")
+        parts.append("Notice and name one small success to keep the momentum kind and real.")
     else:
-        parts.append("You're in a place where small, practical moves will make the day feel steadier.")
+        parts.append("A practical next step — even a tiny one — will help the day feel steadier.")
 
-    # stress handling
     if any(k in s for k in stressed_keywords):
-        parts.append("When stress shows up, try a short grounding action: 30 seconds of steady breathing or a two-minute walk.")
+        parts.append("If stress feels present, try a two-minute grounding exercise or a short walk to soften it.")
     elif "no stress" in s or s.strip() == "":
-        parts.append("Since stress seems low, it's a great chance to use small windows productively and kindly.")
+        parts.append("Stress seems low — use that space gently for something you value or for rest.")
     else:
-        parts.append("If something is bothering you, naming the smallest next action can reduce how big the problem feels.")
+        parts.append("If something is nagging you, writing one smallest next action can reduce its weight.")
 
-    # goals handling
     if g:
-        # Build a goal-tailored encouragement (unique)
         first_goal = g[0]
-        parts.append(f"For your goal — “{first_goal}” — try splitting it into a micro-step you can finish within 15–30 minutes.")
+        parts.append(f"For your goal “{first_goal}”, try a micro-step you can finish in 15–30 minutes.")
         if len(g) > 1:
-            parts.append("For the rest, pick one to focus on so you don't spread yourself thin.")
+            parts.append("Focus on one goal at a time rather than all at once.")
     else:
-        parts.append("If you're not sure about goals today, one tiny intention (even 'rest a little') is a useful plan.")
+        parts.append("If you don't have a goal today, consider a small intention like 'rest for 10 minutes'.")
 
-    # final gentle nudge
-    parts.append("Remember: a small kind action toward yourself is still progress. I'll remember this for next time.")
+    parts.append("Small, kind steps add up — they count.")
 
-    # Join into a single, natural paragraph but keep short sentences
     advice = " ".join(parts)
     return advice
 
@@ -234,30 +285,32 @@ async def complete_checkin(ctx: RunContext[Userdata]):
         print(f"❌ complete_checkin: failed to save entry: {e}")
         return "I recorded the check-in in memory, but I couldn't save it to disk."
 
-    # generate original advice (unique)
+    # Push to Todoist (Option A: automatic)
+    todoist_result = push_checkin_to_todoist(entry)
+
+    # Generate original advice
     advice = generate_original_advice(w.mood, w.energy, w.stress, w.goals)
 
-    # Return friendly recap + advice
-    return f"Check-in saved. {summary} Advice: {advice}"
+    # Friendly recap + advice + todoist status
+    todoist_status = todoist_result.get("status", "skipped")
+    return f"Check-in saved. {summary} Advice: {advice} (todoist: {todoist_status})"
 
 # -----------------------
 # Agent
 # -----------------------
 class WellnessAgent(Agent):
     def __init__(self, history: List[dict]):
-        # Build a full recap of last entry if exists
         if history:
             last = history[-1]
             last_full = (
-                f"Previously you logged:\n"
-                f"- You Mood was: {last.get('mood', 'n/a')}\n"
-                f"-    your Energy was: {last.get('energy', 'n/a')}\n"
-                f"-    your Stress was: {last.get('stress', 'n/a')}\n"
-                f"- and you said your Goals were: {', '.join(last.get('goals', [])) or 'none'}\n"
-                "Now tell me how are you feeling right now?"
+                f"Your last check-in:\n"
+                f"- Mood: {last.get('mood', 'n/a')}\n"
+                f"- Energy: {last.get('energy', 'n/a')}\n"
+                f"- Stress: {last.get('stress', 'n/a')}\n"
+                f"- Goals: {', '.join(last.get('goals', [])) or 'none'}\n"
             )
         else:
-            last_full = "I don't have any past check-ins for you yet."
+            last_full = "This is your first logged check-in."
 
         super().__init__(
             instructions=f"""
@@ -267,13 +320,12 @@ Do NOT offer medical advice or diagnosis.
 
 Flow:
 1) Greet the user briefly.
-2) If previous check-in exists, mention the full recap (as provided below) before asking today's questions.
+2) If previous check-in exists, say the full recap (shown below) before asking today's questions.
 3) Ask about mood (one question at a time).
 4) Ask about energy.
 5) Ask about stress.
 6) Ask for 1–3 small goals.
-7) After all collected, generate original, context-aware emotional guidance (not canned templates), then call complete_checkin.
-8) End with a recap and confirm.
+7) After collecting all, generate original, context-aware emotional guidance (no canned templates), call complete_checkin, and then recap.
 
 Previous recap to mention if present:
 {last_full}
@@ -284,13 +336,12 @@ Ask only one question at a time. Keep the conversation grounded and gentle.
         )
 
 # -----------------------
-# Prewarm: load VAD
+# Prewarm
 # -----------------------
 def prewarm(proc: JobProcess):
     try:
         proc.userdata["vad"] = silero.VAD.load()
     except Exception as e:
-        # non-fatal: proceed without local VAD if it fails
         print(f"⚠️ prewarm: VAD load failed: {e}")
         proc.userdata["vad"] = None
 
@@ -305,25 +356,24 @@ async def entrypoint(ctx: JobContext):
     history = load_history()
     userdata = Userdata(wellness=WellnessState(), history=history)
 
-    # Build greeting: if history present, provide full recap before asking today's mood
     if history:
         last = history[-1]
         greeting = (
-            "Hi — welcome back. I see your last check-in:\n"
+            "Hi, welcome back. Here's your last check-in:\n"
             f"- Mood: {last.get('mood', 'n/a')}\n"
             f"- Energy: {last.get('energy', 'n/a')}\n"
             f"- Stress: {last.get('stress', 'n/a')}\n"
             f"- Goals: {', '.join(last.get('goals', [])) or 'none'}.\n"
-            "now tell me How are you feeling right now?"
+            "How are you feeling today?"
         )
     else:
-        greeting = "Hi! It's nice to meet you — I do a short daily check-in. How are you feeling right now?"
+        greeting = "Hi! It's nice to meet you. I do a short daily check-in. How are you feeling today?"
 
     session = AgentSession(
         stt=deepgram.STT(model="nova-3"),
         llm=google.LLM(model="gemini-2.5-flash"),
         tts=murf.TTS(
-            voice="tanushree",   # female voice from Murf voice list
+            voice="tanushree",
             style="Conversation",
             text_pacing=True,
         ),
@@ -332,34 +382,27 @@ async def entrypoint(ctx: JobContext):
         userdata=userdata
     )
 
-    # start session (no unsupported kwargs)
-    try:
-        await session.start(
-            agent=WellnessAgent(history),
-            room=ctx.room,
-            room_input_options=RoomInputOptions(
-                noise_cancellation=noise_cancellation.BVC()
-            )
+    # Start session
+    await session.start(
+        agent=WellnessAgent(history),
+        room=ctx.room,
+        room_input_options=RoomInputOptions(
+            noise_cancellation=noise_cancellation.BVC()
         )
-    except TypeError as e:
-        # defensive: if start signature differs in your environment, print and re-raise
-        print(f"❌ session.start() error: {e}")
-        raise
+    )
 
-    # Send greeting text to the user (this will be converted to TTS)
+    # Send greeting
     try:
         await session.send_text(greeting)
     except Exception as e:
-        # fallback: just log
         print(f"⚠️ send_text failed: {e}")
 
-    # collect metrics (optional)
+    # metrics
     usage_collector = metrics.UsageCollector()
     @session.on("metrics_collected")
     def _on_metrics(ev: MetricsCollectedEvent):
         usage_collector.collect(ev.metrics)
 
-    # connect the job to allow the session lifecycle
     await ctx.connect()
 
 # -----------------------
