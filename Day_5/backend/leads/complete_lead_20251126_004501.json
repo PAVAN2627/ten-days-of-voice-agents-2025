@@ -1,0 +1,62 @@
+{
+  "timestamp": "2025-11-26T00:45:01.668541",
+  "lead_data": {
+    "email": "pavanmaligenai@gmail.com",
+    "booked_meeting": {
+      "id": "meeting_20251126_004443",
+      "slot_id": "slot_2",
+      "date": "2024-11-26",
+      "time": "10:00 AM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "lead_name": "Prospect",
+      "lead_email": "pavanmaligenai@gmail.com",
+      "lead_company": "",
+      "booked_at": "2025-11-26T00:44:43.295557"
+    },
+    "crm_notes": {
+      "pain_points": [
+        "No specific pain points mentioned"
+      ],
+      "budget_discussed": false,
+      "decision_maker_level": "unknown",
+      "urgency_level": "low",
+      "fit_score": 0,
+      "key_interests": [
+        "Payment solutions"
+      ],
+      "next_steps": "Follow up",
+      "notes": "Prospect interested in payment solutions. Unknown authority level. Low urgency."
+    },
+    "follow_up_email": {
+      "subject": "Confirmation: Demo scheduled for 2024-11-26",
+      "body": "Hi there,\n\nThank you for speaking with me today! I enjoyed learning about your company's payment solutions needs.\n\n\n\ud83c\udfaf DEMO CONFIRMED\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\nDate: 2024-11-26\nTime: 10:00 AM\nDuration: 30 minutes\nType: Demo\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n\n\nQuick Summary:\n\u2022 Company: your company\n\u2022 Your Role: Business Professional\n\u2022 Lead Score: Potential opportunity (0/100)\n\nRazorpay's platform will directly help you with these challenges. During our demo, we'll walk through a customized setup for your business.\n\nBest regards,\nPriya\nSales Development Representative\nRazorpay\n\ud83d\udce7 Follow-up Email | Demo Scheduled\n",
+      "recipient": "pavanmaligenai@gmail.com",
+      "generated_at": "2025-11-26T00:45:01.668541",
+      "bant_score": 0,
+      "pain_points": [],
+      "key_interests": [],
+      "conversation_notes": "",
+      "booked_meeting": {
+        "id": "meeting_20251126_004443",
+        "slot_id": "slot_2",
+        "date": "2024-11-26",
+        "time": "10:00 AM",
+        "duration": "30 minutes",
+        "type": "demo",
+        "lead_name": "Prospect",
+        "lead_email": "pavanmaligenai@gmail.com",
+        "lead_company": "",
+        "booked_at": "2025-11-26T00:44:43.295557"
+      }
+    }
+  },
+  "conversation_transcript": [],
+  "sales_summary": "Thanks ! I'll make sure your company gets the right information. Our team will follow up on the follow up within 24 hours.",
+  "qualification_score": 0,
+  "recommended_action": "COLD LEAD - Send nurture content, follow up in 1 week",
+  "is_returning_visitor": false,
+  "detected_persona": null,
+  "email_sent": true,
+  "email_sent_at": "2025-11-26T00:45:05.114015"
+}

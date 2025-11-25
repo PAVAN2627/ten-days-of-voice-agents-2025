@@ -1,0 +1,15 @@
+{
+  "company": "TechCorp",
+  "email": "john@techcorp.com",
+  "detected_persona": "finance",
+  "score": 75,
+  "temperature": "\ud83d\udd25 HOT",
+  "conversation": [
+    "I'm John from TechCorp",
+    "I'm the CTO and we need a payment gateway",
+    "We have budget approved",
+    "My email is john@techcorp.com",
+    "That's all, thanks!"
+  ],
+  "timestamp": "2025-11-25T23:19:10.707247"
+}

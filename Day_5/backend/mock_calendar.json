@@ -1,0 +1,354 @@
+{
+  "available_slots": [
+    {
+      "id": "slot_1",
+      "date": "2024-11-26",
+      "time": "9:00 AM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": false
+    },
+    {
+      "id": "slot_2",
+      "date": "2024-11-26",
+      "time": "10:00 AM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": false
+    },
+    {
+      "id": "slot_3",
+      "date": "2024-11-26",
+      "time": "11:00 AM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": false
+    },
+    {
+      "id": "slot_4",
+      "date": "2024-11-26",
+      "time": "2:00 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": false
+    },
+    {
+      "id": "slot_5",
+      "date": "2024-11-26",
+      "time": "3:00 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": false
+    },
+    {
+      "id": "slot_6",
+      "date": "2024-11-26",
+      "time": "4:00 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    },
+    {
+      "id": "slot_7",
+      "date": "2024-11-27",
+      "time": "9:00 AM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    },
+    {
+      "id": "slot_8",
+      "date": "2024-11-27",
+      "time": "10:00 AM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    },
+    {
+      "id": "slot_9",
+      "date": "2024-11-27",
+      "time": "11:00 AM",
+      "duration": "45 minutes",
+      "type": "technical_demo",
+      "available": true
+    },
+    {
+      "id": "slot_10",
+      "date": "2024-11-27",
+      "time": "2:00 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    },
+    {
+      "id": "slot_11",
+      "date": "2024-11-27",
+      "time": "3:00 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": false
+    },
+    {
+      "id": "slot_12",
+      "date": "2024-11-27",
+      "time": "4:00 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    },
+    {
+      "id": "slot_13",
+      "date": "2024-11-28",
+      "time": "9:00 AM",
+      "duration": "60 minutes",
+      "type": "enterprise_meeting",
+      "available": true
+    },
+    {
+      "id": "slot_14",
+      "date": "2024-11-28",
+      "time": "10:30 AM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    },
+    {
+      "id": "slot_15",
+      "date": "2024-11-28",
+      "time": "11:30 AM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    },
+    {
+      "id": "slot_16",
+      "date": "2024-11-28",
+      "time": "2:00 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    },
+    {
+      "id": "slot_17",
+      "date": "2024-11-28",
+      "time": "3:00 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    },
+    {
+      "id": "slot_18",
+      "date": "2024-11-28",
+      "time": "4:00 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": false
+    },
+    {
+      "id": "slot_19",
+      "date": "2024-11-29",
+      "time": "9:00 AM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    },
+    {
+      "id": "slot_20",
+      "date": "2024-11-29",
+      "time": "10:00 AM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    },
+    {
+      "id": "slot_21",
+      "date": "2024-11-29",
+      "time": "11:00 AM",
+      "duration": "45 minutes",
+      "type": "technical_demo",
+      "available": true
+    },
+    {
+      "id": "slot_22",
+      "date": "2024-11-29",
+      "time": "2:00 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    },
+    {
+      "id": "slot_23",
+      "date": "2024-11-29",
+      "time": "3:00 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    },
+    {
+      "id": "slot_24",
+      "date": "2024-11-29",
+      "time": "4:00 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    },
+    {
+      "id": "slot_25",
+      "date": "2024-11-30",
+      "time": "10:00 AM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    },
+    {
+      "id": "slot_26",
+      "date": "2024-11-30",
+      "time": "11:00 AM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    },
+    {
+      "id": "slot_27",
+      "date": "2024-11-30",
+      "time": "2:00 PM",
+      "duration": "60 minutes",
+      "type": "enterprise_meeting",
+      "available": true
+    },
+    {
+      "id": "slot_28",
+      "date": "2024-11-30",
+      "time": "3:30 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    },
+    {
+      "id": "slot_29",
+      "date": "2024-12-01",
+      "time": "9:00 AM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    },
+    {
+      "id": "slot_30",
+      "date": "2024-12-01",
+      "time": "10:00 AM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    },
+    {
+      "id": "slot_31",
+      "date": "2024-12-01",
+      "time": "11:00 AM",
+      "duration": "45 minutes",
+      "type": "technical_demo",
+      "available": true
+    },
+    {
+      "id": "slot_32",
+      "date": "2024-12-01",
+      "time": "2:00 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    },
+    {
+      "id": "slot_33",
+      "date": "2024-12-01",
+      "time": "3:00 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "available": true
+    }
+  ],
+  "booked_meetings": [
+    {
+      "id": "meeting_20251125_225638",
+      "slot_id": "slot_11",
+      "date": "2024-11-27",
+      "time": "3:00 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "lead_name": "Prospect",
+      "lead_email": "",
+      "lead_company": "Tech Corp",
+      "booked_at": "2025-11-25T22:56:38.479661"
+    },
+    {
+      "id": "meeting_20251125_233943",
+      "slot_id": "slot_18",
+      "date": "2024-11-28",
+      "time": "4:00 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "lead_name": "Prospect",
+      "lead_email": "",
+      "lead_company": "Clothing Company",
+      "booked_at": "2025-11-25T23:39:43.257940"
+    },
+    {
+      "id": "meeting_20251126_004415",
+      "slot_id": "slot_1",
+      "date": "2024-11-26",
+      "time": "9:00 AM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "lead_name": "Prospect",
+      "lead_email": "pavanmaligenai@gmail.com",
+      "lead_company": "",
+      "booked_at": "2025-11-26T00:44:15.922856"
+    },
+    {
+      "id": "meeting_20251126_004443",
+      "slot_id": "slot_2",
+      "date": "2024-11-26",
+      "time": "10:00 AM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "lead_name": "Prospect",
+      "lead_email": "pavanmaligenai@gmail.com",
+      "lead_company": "",
+      "booked_at": "2025-11-26T00:44:43.295557"
+    },
+    {
+      "id": "meeting_20251126_013756",
+      "slot_id": "slot_3",
+      "date": "2024-11-26",
+      "time": "11:00 AM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "lead_name": "Paul",
+      "lead_email": "pavanmaligenai@gmail.com",
+      "lead_company": "avengers",
+      "booked_at": "2025-11-26T01:37:56.946774"
+    },
+    {
+      "id": "meeting_20251126_014758",
+      "slot_id": "slot_4",
+      "date": "2024-11-26",
+      "time": "2:00 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "lead_name": "Four one",
+      "lead_email": "pavanmaligenai@gmail.com",
+      "lead_company": "Verobores",
+      "booked_at": "2025-11-26T01:47:58.107727"
+    },
+    {
+      "id": "meeting_20251126_015206",
+      "slot_id": "slot_5",
+      "date": "2024-11-26",
+      "time": "3:00 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "lead_name": "Paul",
+      "lead_email": "pavanmaligenai@gmail.com",
+      "lead_company": "Apple",
+      "booked_at": "2025-11-26T01:52:06.203520"
+    }
+  ]
+}

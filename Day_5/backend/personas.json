@@ -1,0 +1,64 @@
+{
+  "personas": {
+    "developer": {
+      "keywords": ["developer", "engineer", "code", "api", "integration", "technical", "sdk", "documentation"],
+      "pitch_angle": "technical_excellence",
+      "key_benefits": [
+        "15-minute API integration with comprehensive SDKs",
+        "Detailed technical documentation and sandbox environment", 
+        "Webhook support for real-time payment notifications",
+        "99.9% uptime with robust error handling"
+      ],
+      "pain_points": ["complex integration", "poor documentation", "unreliable webhooks", "limited testing tools"],
+      "language_style": "technical, specific, detail-oriented"
+    },
+    "founder": {
+      "keywords": ["founder", "ceo", "startup", "business", "growth", "scale", "revenue", "company"],
+      "pitch_angle": "business_growth",
+      "key_benefits": [
+        "Increase conversion rates by 40% with seamless checkout",
+        "Reduce payment failures and recover lost revenue",
+        "Scale globally with 100+ payment methods",
+        "Focus on business while we handle payments"
+      ],
+      "pain_points": ["lost revenue", "poor conversion", "scaling challenges", "operational overhead"],
+      "language_style": "business-focused, ROI-driven, strategic"
+    },
+    "product_manager": {
+      "keywords": ["product", "manager", "pm", "user experience", "metrics", "analytics", "conversion"],
+      "pitch_angle": "user_experience",
+      "key_benefits": [
+        "Improve user experience with one-click payments",
+        "Detailed analytics and conversion tracking",
+        "A/B testing capabilities for checkout optimization",
+        "Mobile-first design for better engagement"
+      ],
+      "pain_points": ["poor user experience", "low conversion", "lack of analytics", "mobile issues"],
+      "language_style": "user-centric, data-driven, experience-focused"
+    },
+    "finance": {
+      "keywords": ["finance", "cfo", "accounting", "cost", "budget", "pricing", "fees", "reconciliation"],
+      "pitch_angle": "cost_efficiency", 
+      "key_benefits": [
+        "Transparent pricing with no hidden fees",
+        "Automated reconciliation and reporting",
+        "Competitive transaction rates at scale",
+        "Detailed financial analytics and insights"
+      ],
+      "pain_points": ["high fees", "complex pricing", "manual reconciliation", "poor reporting"],
+      "language_style": "cost-focused, numbers-driven, efficiency-oriented"
+    },
+    "marketer": {
+      "keywords": ["marketing", "growth", "campaigns", "customer", "acquisition", "retention", "funnel"],
+      "pitch_angle": "customer_acquisition",
+      "key_benefits": [
+        "Reduce checkout abandonment by 60%",
+        "Support for promotional codes and discounts",
+        "Customer payment preferences and behavior data",
+        "Seamless subscription and recurring billing"
+      ],
+      "pain_points": ["checkout abandonment", "poor customer data", "complex promotions", "subscription issues"],
+      "language_style": "growth-focused, customer-centric, conversion-oriented"
+    }
+  }
+}
