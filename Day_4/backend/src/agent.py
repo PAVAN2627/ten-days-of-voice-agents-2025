@@ -23,6 +23,13 @@ from datetime import datetime
 
 from dotenv import load_dotenv
 
+# Database import
+try:
+    from .database import init_db, save_mastery, load_mastery, log_session
+    USE_DATABASE = True
+except ImportError:
+    USE_DATABASE = False
+
 # livekit agents imports
 from livekit.agents import (
     Agent,
@@ -53,7 +60,7 @@ STATE_PATH = os.path.join(STATE_DIR, "tutor_state.json")
 
 # Voice mapping
 VOICE_LEARN = "Matthew"
-VOICE_QUIZ = "Anusha"
+VOICE_QUIZ = "Anusha"  # Fixed: was Alicia
 VOICE_TEACH = "Ken"
 
 # -----------------------
@@ -67,6 +74,14 @@ def load_content() -> List[Dict[str, Any]]:
         return json.load(f)
 
 def load_state() -> Dict[str, Any]:
+    if USE_DATABASE:
+        try:
+            mastery = load_mastery()
+            return {"last_mode": None, "last_concept": None, "mastery": mastery}
+        except Exception as e:
+            logger.warning("Database load failed: %s", e)
+    
+    # Fallback to JSON
     if not os.path.exists(STATE_PATH):
         return {"last_mode": None, "last_concept": None, "mastery": {}}
     try:
@@ -77,6 +92,16 @@ def load_state() -> Dict[str, Any]:
         return {"last_mode": None, "last_concept": None, "mastery": {}}
 
 def save_state(state: Dict[str, Any]):
+    if USE_DATABASE:
+        try:
+            mastery = state.get("mastery", {})
+            for concept_id, data in mastery.items():
+                save_mastery(concept_id, data)
+            return
+        except Exception as e:
+            logger.warning("Database save failed: %s", e)
+    
+    # Fallback to JSON
     try:
         with open(STATE_PATH, "w", encoding="utf-8") as f:
             json.dump(state, f, indent=2, ensure_ascii=False)
@@ -136,23 +161,57 @@ def switch_session_voice(session: AgentSession, new_voice: str):
 # Small evaluation helpers
 # -----------------------
 def score_explanation(reference: str, user_text: str) -> Dict[str, Any]:
-    """Simple overlap-based scoring (0-100) + short feedback."""
+    """Advanced explanation scoring with detailed feedback."""
     def words(s):
         return re.findall(r"\w+", (s or "").lower())
+    
     ref_words = set(words(reference))
     user_words = set(words(user_text))
+    
     if not ref_words:
         return {"score": 0, "feedback": "No reference available to score against."}
+    
+    if not user_words:
+        return {"score": 0, "feedback": "Please provide an explanation to evaluate."}
+    
+    # Calculate different scoring components
     common = ref_words & user_words
-    ratio = len(common) / max(len(ref_words), 1)
-    score = int(min(100, round(ratio * 100)))
-    if score >= 80:
-        fb = "Excellent — you covered the key points clearly."
-    elif score >= 50:
-        fb = "Good — you covered several ideas but missed some details."
+    coverage_ratio = len(common) / len(ref_words)  # How much of reference is covered
+    precision_ratio = len(common) / len(user_words) if user_words else 0  # How accurate the explanation is
+    
+    # Key concept detection (look for important programming terms)
+    key_terms = {"variable", "loop", "function", "condition", "if", "else", "for", "while", "def", "return"}
+    ref_key_terms = ref_words & key_terms
+    user_key_terms = user_words & key_terms
+    key_term_score = len(user_key_terms & ref_key_terms) / max(len(ref_key_terms), 1) if ref_key_terms else 1
+    
+    # Combined score with weights
+    score = int(min(100, round(
+        coverage_ratio * 40 +      # 40% for covering reference concepts
+        precision_ratio * 30 +     # 30% for accuracy (not adding irrelevant info)
+        key_term_score * 30        # 30% for using correct terminology
+    )))
+    
+    # Detailed feedback based on performance
+    if score >= 90:
+        fb = "Outstanding! You demonstrated deep understanding with precise terminology."
+    elif score >= 80:
+        fb = "Excellent! You covered the key concepts clearly and accurately."
+    elif score >= 70:
+        fb = "Good work! You understand the main ideas. Try to be more precise with technical terms."
+    elif score >= 60:
+        fb = "Decent attempt! You got some key points but missed important details. Review the concept again."
+    elif score >= 40:
+        fb = "You're on the right track but need to cover more core concepts. Focus on the main definition."
     else:
-        fb = "Nice attempt — try to state the core idea and one short example."
-    return {"score": score, "feedback": fb}
+        fb = "Keep trying! Make sure to explain the basic purpose and give a simple example."
+    
+    # Add specific suggestions
+    missing_key_terms = ref_key_terms - user_key_terms
+    if missing_key_terms and score < 80:
+        fb += f" Try mentioning: {', '.join(list(missing_key_terms)[:3])}."
+    
+    return {"score": score, "feedback": fb, "coverage": round(coverage_ratio * 100), "precision": round(precision_ratio * 100)}
 
 # -----------------------
 # Tools exposed to LLM / agent flow
@@ -326,10 +385,90 @@ async def get_mastery_report(ctx: RunContext[dict]):
     mastery = state.get("mastery", {})
     if not mastery:
         return "No mastery data yet."
-    lines = []
+    
+    lines = ["📊 MASTERY REPORT:"]
     for cid, info in mastery.items():
-        lines.append(f"{cid}: last={info.get('last_score')}, avg={info.get('avg_score')}, taught_back={info.get('times_taught_back')}, quizzed={info.get('times_quizzed')}")
-    return "Mastery:\n" + "\n".join(lines)
+        avg = info.get('avg_score', 0) or 0
+        status = "🟢 Strong" if avg >= 80 else "🟡 Developing" if avg >= 60 else "🔴 Needs Work"
+        lines.append(f"{cid}: {status} (avg: {avg}%, attempts: {info.get('times_quizzed', 0) + info.get('times_taught_back', 0)})")
+    return "\n".join(lines)
+
+@function_tool
+async def get_weakness_analysis(ctx: RunContext[dict]):
+    """Analyze which concepts the user is weakest at and suggest focus areas."""
+    state = load_state()
+    mastery = state.get("mastery", {})
+    if not mastery:
+        return "No learning data yet. Try some quizzes or teach-back sessions first!"
+    
+    # Sort concepts by average score (lowest first)
+    concept_scores = []
+    for cid, info in mastery.items():
+        avg_score = info.get('avg_score', 0) or 0
+        attempts = info.get('times_quizzed', 0) + info.get('times_taught_back', 0)
+        if attempts > 0:  # Only include concepts with attempts
+            concept_scores.append((cid, avg_score, attempts))
+    
+    if not concept_scores:
+        return "No scored attempts yet. Try taking some quizzes!"
+    
+    concept_scores.sort(key=lambda x: x[1])  # Sort by score (lowest first)
+    
+    lines = ["🎯 WEAKNESS ANALYSIS:"]
+    
+    # Show weakest concepts
+    weakest = concept_scores[:3]  # Top 3 weakest
+    lines.append("\n📉 Focus on these concepts:")
+    for i, (cid, score, attempts) in enumerate(weakest, 1):
+        lines.append(f"{i}. {cid}: {score}% avg ({attempts} attempts)")
+    
+    # Suggest practice plan
+    if weakest:
+        worst_concept = weakest[0][0]
+        lines.append(f"\n💡 RECOMMENDATION: Focus on '{worst_concept}' - try teach-back mode for deeper understanding!")
+    
+    return "\n".join(lines)
+
+@function_tool
+async def get_learning_path(ctx: RunContext[dict]):
+    """Suggest a personalized learning path based on mastery levels."""
+    state = load_state()
+    mastery = state.get("mastery", {})
+    content = load_content()
+    
+    # Define learning path order (beginner -> advanced)
+    learning_order = ["variables", "conditions", "loops", "functions"]
+    
+    lines = ["🛤️ PERSONALIZED LEARNING PATH:"]
+    
+    for i, concept_id in enumerate(learning_order, 1):
+        concept_info = next((c for c in content if c["id"] == concept_id), None)
+        if not concept_info:
+            continue
+            
+        title = concept_info.get("title", concept_id)
+        mastery_info = mastery.get(concept_id, {})
+        avg_score = mastery_info.get('avg_score', 0) or 0
+        attempts = mastery_info.get('times_quizzed', 0) + mastery_info.get('times_taught_back', 0)
+        
+        if avg_score >= 80:
+            status = "✅ Mastered"
+        elif avg_score >= 60:
+            status = "🔄 Review Needed"
+        elif attempts > 0:
+            status = "❌ Struggling"
+        else:
+            status = "⭐ Not Started"
+            
+        lines.append(f"{i}. {title}: {status}")
+        
+        # Add specific recommendations
+        if avg_score < 60 and attempts > 0:
+            lines.append(f"   → Try teach-back mode for {concept_id}")
+        elif attempts == 0:
+            lines.append(f"   → Start with learn mode for {concept_id}")
+    
+    return "\n".join(lines)
 
 
 
@@ -371,6 +510,11 @@ LEARN MODE (Matthew voice): Explain concepts clearly and thoroughly
 QUIZ MODE (Anusha voice): Ask multiple-choice questions energetically  
 TEACH-BACK MODE (Ken voice): Listen to student explanations supportively
 
+ADVANCED FEATURES:
+- get_weakness_analysis(): Show which concepts need most work
+- get_learning_path(): Suggest personalized study plan
+- get_mastery_report(): Detailed progress tracking
+
 When user wants concepts:
 1. Call list_concepts() to show available topics
 2. Ask which concept they want
@@ -386,11 +530,18 @@ When user chooses mode:
    - Quiz: Call get_mcq() then evaluate_mcq()
    - Teach-back: Ask for explanation then evaluate_teachback()
 
+ADAPTIVE COACHING:
+- If user asks about progress → call get_mastery_report()
+- If user asks what to focus on → call get_weakness_analysis()
+- If user wants study plan → call get_learning_path()
+- Use mastery data to suggest next steps
+
 RULES:
 - ALWAYS use tools, never make up responses
 - Keep responses SHORT and mode-appropriate
 - Voice changes automatically with set_mode
-- Adapt personality to current mode"""
+- Adapt personality to current mode
+- Proactively suggest weakness analysis after poor performance"""
 
         super().__init__(
             instructions=instructions,
@@ -402,7 +553,9 @@ RULES:
                 get_mcq,
                 evaluate_mcq,
                 evaluate_teachback,
-                get_mastery_report
+                get_mastery_report,
+                get_weakness_analysis,
+                get_learning_path
             ]
         )
         self.content = content
@@ -427,6 +580,14 @@ async def entrypoint(ctx: JobContext):
     """Main entry point for the tutor agent"""
     ctx.log_context_fields = {"room": ctx.room.name}
     logger.info("Starting Day4 tutor - room %s", ctx.room.name)
+    
+    # Initialize database if available
+    if USE_DATABASE:
+        try:
+            init_db()
+            logger.info("Database initialized")
+        except Exception as e:
+            logger.warning("Database init failed: %s", e)
 
     # Load content from persistent storage
     content = load_content()

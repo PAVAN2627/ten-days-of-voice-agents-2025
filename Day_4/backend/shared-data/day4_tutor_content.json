@@ -2,6 +2,8 @@
   {
     "id": "variables",
     "title": "Variables",
+    "level": "beginner",
+    "prerequisites": [],
     "summary": "Variables store values so you can reuse them later. Think of them as labeled boxes that hold information your program needs.",
     "sample_question": "What is a variable and why is it useful?",
     "mcq": [
@@ -51,6 +53,8 @@
   {
     "id": "loops",
     "title": "Loops",
+    "level": "intermediate",
+    "prerequisites": ["variables", "conditions"],
     "summary": "Loops let you repeat an action multiple times until a condition is met. Common types include for loops and while loops.",
     "sample_question": "Explain the difference between a for loop and a while loop.",
     "mcq": [
@@ -100,6 +104,8 @@
   {
     "id": "functions",
     "title": "Functions",
+    "level": "intermediate",
+    "prerequisites": ["variables", "conditions"],
     "summary": "Functions are reusable blocks of code that perform a specific task. They help organize programs, avoid repetition, and make code more readable. A function is executed when it is called.",
     "sample_question": "What is the advantage of using functions?",
     "mcq": [
@@ -154,6 +160,8 @@
   {
     "id": "conditions",
     "title": "Conditions",
+    "level": "beginner",
+    "prerequisites": ["variables"],
     "summary": "Conditions help your program decide what to do based on whether something is true or false. They typically use if, elif, and else to choose between different paths.",
     "sample_question": "Explain how conditions help programs make decisions.",
     "mcq": [
@@ -196,6 +204,165 @@
           "End line"
         ],
         "answer": 0
+      }
+    ]
+  },
+
+  {
+    "id": "lists",
+    "title": "Lists and Arrays",
+    "level": "intermediate",
+    "prerequisites": ["variables", "loops"],
+    "summary": "Lists are collections that store multiple values in a single variable. You can access, modify, and iterate through list items using indexes and loops.",
+    "sample_question": "How do you access and modify items in a list?",
+    "mcq": [
+      {
+        "question": "What is a list in programming?",
+        "options": [
+          "A single value storage.",
+          "A collection of multiple values.",
+          "A type of loop.",
+          "A conditional statement."
+        ],
+        "answer": 1
+      },
+      {
+        "question": "How do you access the first item in a list?",
+        "options": ["list[1]", "list[0]", "list.first()", "list.get(1)"],
+        "answer": 1
+      },
+      {
+        "question": "What does list.append() do?",
+        "options": [
+          "Removes the last item.",
+          "Adds an item to the end.",
+          "Sorts the list.",
+          "Clears the list."
+        ],
+        "answer": 1
+      },
+      {
+        "question": "Which loop is best for iterating through a list?",
+        "options": ["while loop", "for loop", "if statement", "switch case"],
+        "answer": 1
+      }
+    ]
+  },
+
+  {
+    "id": "dictionaries",
+    "title": "Dictionaries and Objects",
+    "level": "intermediate",
+    "prerequisites": ["variables", "lists"],
+    "summary": "Dictionaries store data as key-value pairs, allowing you to organize and access information using meaningful names instead of numeric indexes.",
+    "sample_question": "What are the advantages of dictionaries over lists?",
+    "mcq": [
+      {
+        "question": "What is a dictionary?",
+        "options": [
+          "A list of words.",
+          "A collection of key-value pairs.",
+          "A type of loop.",
+          "A mathematical function."
+        ],
+        "answer": 1
+      },
+      {
+        "question": "How do you access a value in a dictionary?",
+        "options": ["dict[0]", "dict.get()", "dict[key]", "dict.value()"],
+        "answer": 2
+      },
+      {
+        "question": "What happens if you try to access a non-existent key?",
+        "options": [
+          "Returns None",
+          "Returns empty string",
+          "Raises an error",
+          "Creates the key"
+        ],
+        "answer": 2
+      }
+    ]
+  },
+
+  {
+    "id": "classes",
+    "title": "Classes and Objects",
+    "level": "advanced",
+    "prerequisites": ["functions", "dictionaries"],
+    "summary": "Classes are blueprints for creating objects that combine data and functions. They enable object-oriented programming and help organize complex code.",
+    "sample_question": "Explain the relationship between classes and objects.",
+    "mcq": [
+      {
+        "question": "What is a class?",
+        "options": [
+          "A type of variable.",
+          "A blueprint for creating objects.",
+          "A built-in function.",
+          "A loop structure."
+        ],
+        "answer": 1
+      },
+      {
+        "question": "What is an object?",
+        "options": [
+          "A class definition.",
+          "An instance of a class.",
+          "A function parameter.",
+          "A data type."
+        ],
+        "answer": 1
+      },
+      {
+        "question": "What is the __init__ method used for?",
+        "options": [
+          "Deleting objects.",
+          "Initializing object attributes.",
+          "Calling other methods.",
+          "Printing object data."
+        ],
+        "answer": 1
+      }
+    ]
+  },
+
+  {
+    "id": "error_handling",
+    "title": "Error Handling",
+    "level": "advanced",
+    "prerequisites": ["functions", "conditions"],
+    "summary": "Error handling allows programs to gracefully manage unexpected situations using try-except blocks, preventing crashes and providing user-friendly error messages.",
+    "sample_question": "Why is error handling important in programming?",
+    "mcq": [
+      {
+        "question": "What is the purpose of try-except blocks?",
+        "options": [
+          "To repeat code.",
+          "To handle potential errors gracefully.",
+          "To define functions.",
+          "To create loops."
+        ],
+        "answer": 1
+      },
+      {
+        "question": "When does the except block execute?",
+        "options": [
+          "Always after try.",
+          "Only when an error occurs in try.",
+          "Before the try block.",
+          "Never."
+        ],
+        "answer": 1
+      },
+      {
+        "question": "What happens if you don't handle an error?",
+        "options": [
+          "The program continues normally.",
+          "The program crashes.",
+          "The error is ignored.",
+          "The program restarts."
+        ],
+        "answer": 1
       }
     ]
   }

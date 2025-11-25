@@ -1,13 +1,27 @@
 {
-  "last_mode": "quiz",
-  "last_concept": "loops",
+  "last_mode": "teach_back",
+  "last_concept": "conditions",
   "mastery": {
     "variables": {
       "times_explained": 1,
-      "times_quizzed": 6,
+      "times_quizzed": 7,
       "times_taught_back": 1,
       "last_score": 100,
-      "avg_score": 73.5
+      "avg_score": 86.8
+    },
+    "classes": {
+      "times_explained": 0,
+      "times_quizzed": 1,
+      "times_taught_back": 2,
+      "last_score": 9,
+      "avg_score": 31.8
+    },
+    "conditions": {
+      "times_explained": 0,
+      "times_quizzed": 1,
+      "times_taught_back": 3,
+      "last_score": 32,
+      "avg_score": 45.2
     }
   }
 }
