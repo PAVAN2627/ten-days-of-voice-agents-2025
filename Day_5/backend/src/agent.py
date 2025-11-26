@@ -71,33 +71,47 @@ INFORMATION COLLECTION RULES:
 - Don't proceed to demos or questions until you have: name, email, company, role, team_size, timeline, need
 - If user asks questions before giving details, say: "Happy to help! But first, may I get your name?"
 
-AFTER COLLECTING INFO:
+AFTER COLLECTING INFO - FAQ PHASE:
 - Answer their questions using search_faq() tool
-- Detect their persona (developer/founder/PM/finance/marketer)
-- Offer relevant solutions
-- Suggest booking a demo
+- Use persona-specific language based on detected persona
+- While answering questions, NATURALLY collect pain points and interests:
+  * When they mention problems: "I understand that's a challenge. What other pain points are you facing?"
+  * When they ask about features: Store as key_interests
+  * Listen for pain points in their questions and store them
+- DO NOT offer demo yet - let them ask all their questions first
+- After each answer, ask: "Do you have any other questions?"
+- ONLY when they say "no more questions" or "that's all", then offer demo
 
-BOOKING PROCESS (FOLLOW THIS ORDER):
-1. Ask: "Would you like to schedule a demo?"
-2. If yes, ask: "What are the main challenges or pain points you're facing with payments right now?"
-3. Store their pain points using store_lead_info(field="pain_points", value="their answer")
-4. Ask: "What specific features or solutions are you most interested in seeing?"
-5. Store interests using store_lead_info(field="key_interests", value="their answer")
-6. Then say: "Perfect! Let me show you available times."
-7. ALWAYS call show_available_meetings() to check real slots
-8. Present ONLY available options from the tool (never make up times)
-9. Use book_meeting() with their choice
-10. Confirm with their name and email
+DEMO OFFERING (ONLY AFTER FAQ PHASE):
+- When customer indicates no more questions, say: "Would you like to schedule a demo to see this in action?"
+- If they say NO to demo: "No problem! Feel free to reach out anytime. Have a great day!"
+- If they say YES to demo: Proceed to booking process
+
+BOOKING PROCESS (ONLY IF DEMO ACCEPTED):
+1. Check if pain_points already collected during FAQ
+   - If NOT collected: "What are the main challenges you're facing with payments?"
+   - Store using store_lead_info(field="pain_points", value="their answer")
+2. Check if key_interests already collected during FAQ
+   - If NOT collected: "What specific features would you like to see in the demo?"
+   - Store using store_lead_info(field="key_interests", value="their answer")
+3. Then say: "Perfect! Let me show you available times."
+4. ALWAYS call show_available_meetings() to check real slots
+5. Present ONLY available options from the tool (never make up times)
+6. Use book_meeting() with their choice
+7. Confirm with their name and email
 
 CRITICAL RULES:
 - NEVER skip the opening sequence
+- NEVER offer demo until customer says "no more questions"
 - NEVER book without email
 - NEVER suggest times without checking show_available_meetings() first
+- ALWAYS collect pain_points and key_interests before showing meeting slots
 - ALWAYS store info using store_lead_info() immediately
 - Keep responses SHORT (1-2 sentences max)
 - Ask one question at a time
+- Let customer ask ALL their questions before offering demo
 
-EXAMPLE OPENING:
+EXAMPLE FLOW:
 You: "Hi! I'm Priya from Razorpay. Before we start, I need a few quick details. What's your name?"
 User: "John"
 You: "Nice to meet you, John! What's your email address?"
@@ -112,7 +126,19 @@ You: "Got it. When are you looking to implement this - now, soon, or later?"
 User: "We need it ASAP"
 You: "Understood! What brings you to Razorpay today?"
 User: "Need payment gateway"
-You: "Excellent! As a developer with an urgent need, I can show you our quick API integration. Feel free to ask questions, or I can help schedule a demo."
+You: "Excellent! I can help with that. What questions do you have about our payment gateway?"
+User: "How long does integration take?"
+You: "Our API integration takes just 15 minutes with comprehensive SDKs. Do you have other questions?"
+User: "What about pricing?"
+You: "We have transparent pricing with no hidden fees. Anything else you'd like to know?"
+User: "No, that's all"
+You: "Great! Would you like to schedule a demo to see it in action?"
+User: "Yes"
+You: "Perfect! What are the main challenges you're facing with payments right now?"
+User: "High fees and slow settlements"
+You: "Got it. What specific features would you like to see in the demo?"
+User: "API integration and webhooks"
+You: "Excellent! Let me show you available times."
 
 AVOID: Long explanations, skipping info collection, making up meeting times
 FOCUS: Collect info FIRST → Answer questions → Book demo""",
@@ -146,6 +172,12 @@ FOCUS: Collect info FIRST → Answer questions → Book demo""",
         """Check if all required information has been collected"""
         required_fields = ["name", "email", "company", "role", "team_size", "timeline", "use_case"]
         return all(self.lead_data.get(field) for field in required_fields)
+    
+    def _has_booking_info(self) -> bool:
+        """Check if pain points and key interests are collected before booking"""
+        pain_points = self.lead_data.get("pain_points", [])
+        key_interests = self.lead_data.get("key_interests", [])
+        return bool(pain_points) and bool(key_interests)
     
     def _get_missing_info(self) -> list:
         """Get list of missing required information"""
@@ -264,7 +296,16 @@ FOCUS: Collect info FIRST → Answer questions → Book demo""",
     
     @function_tool
     async def show_available_meetings(self, context: RunContext, meeting_type: str = "demo") -> str:
-        """Show available meeting slots for scheduling."""
+        """Show available meeting slots for scheduling. REQUIRES pain points and interests to be collected first."""
+        
+        # Check if pain points and interests are collected
+        if not self._has_booking_info():
+            missing = []
+            if not self.lead_data.get("pain_points"):
+                missing.append("What are the main challenges you're facing with payments?")
+            if not self.lead_data.get("key_interests"):
+                missing.append("What specific features would you like to see in the demo?")
+            return f"Before I show available times, I need to know: {' Also, '.join(missing)}"
         
         available_slots = []
         
@@ -369,10 +410,23 @@ FOCUS: Collect info FIRST → Answer questions → Book demo""",
     async def check_required_info(self, context: RunContext) -> str:
         """Check if all required information has been collected from the user."""
         if self._has_required_info():
-            return "All required information collected: ✅ Name, ✅ Email, ✅ Company, ✅ Role, ✅ Team Size, ✅ Timeline, ✅ Need. You can now answer questions or book meetings."
+            return "All required information collected: ✅ Name, ✅ Email, ✅ Company, ✅ Role, ✅ Team Size, ✅ Timeline, ✅ Need. You can now answer their questions."
         else:
             missing = self._get_missing_info()
             return f"Still need to collect: {', '.join(missing)}. Please ask for these details first."
+    
+    @function_tool
+    async def check_booking_readiness(self, context: RunContext) -> str:
+        """Check if pain points and key interests are collected before booking demo."""
+        if not self._has_booking_info():
+            missing = []
+            if not self.lead_data.get("pain_points"):
+                missing.append("pain points")
+            if not self.lead_data.get("key_interests"):
+                missing.append("key interests")
+            return f"Before booking, ask about: {', '.join(missing)}. Don't show meeting slots yet."
+        else:
+            return "✅ Pain points and interests collected. Ready to show available meeting times."
     
     @function_tool
     async def search_faq(self, context: RunContext, query: str) -> str:
