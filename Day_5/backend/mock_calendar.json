@@ -62,7 +62,7 @@
       "time": "10:00 AM",
       "duration": "30 minutes",
       "type": "demo",
-      "available": true
+      "available": false
     },
     {
       "id": "slot_9",
@@ -78,7 +78,7 @@
       "time": "2:00 PM",
       "duration": "30 minutes",
       "type": "demo",
-      "available": true
+      "available": false
     },
     {
       "id": "slot_11",
@@ -373,6 +373,30 @@
       "lead_email": "pavanmaligenai@gmail.com",
       "lead_company": "Brotherhood company",
       "booked_at": "2025-11-26T13:01:51.980009"
+    },
+    {
+      "id": "meeting_20251126_132622",
+      "slot_id": "slot_8",
+      "date": "2024-11-27",
+      "time": "10:00 AM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "lead_name": "Raj",
+      "lead_email": "pavanmaligenai@gmail.com",
+      "lead_company": "Brotherhood company",
+      "booked_at": "2025-11-26T13:26:22.047630"
+    },
+    {
+      "id": "meeting_20251126_133735",
+      "slot_id": "slot_10",
+      "date": "2024-11-27",
+      "time": "2:00 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "lead_name": "Raj",
+      "lead_email": "pavanmaligenai@gmail.com",
+      "lead_company": "Brotherhood company",
+      "booked_at": "2025-11-26T13:37:35.681939"
     }
   ]
 }

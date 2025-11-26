@@ -82,7 +82,7 @@ export const Day4SplitView: React.FC<Day4SplitViewProps> = ({
               initial={{ opacity: 0, x: -40 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, ease: 'easeOut' }}
-              className="flex w-full max-w-3xl flex-col gap-3 rounded-2xl border border-blue-500/30 bg-gradient-to-br from-blue-500/5 to-transparent p-5 backdrop-blur-sm"
+              className="flex w-full max-w-5xl flex-col gap-3 rounded-2xl border border-blue-500/30 bg-gradient-to-br from-blue-500/5 to-transparent p-5 backdrop-blur-sm"
             >
               {/* Header */}
               <div className="flex items-center gap-2">
@@ -212,7 +212,7 @@ export const Day4SplitView: React.FC<Day4SplitViewProps> = ({
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, ease: 'easeOut' }}
-              className="flex w-full max-w-3xl flex-col gap-3 rounded-2xl border border-green-500/30 bg-gradient-to-br from-green-500/5 to-transparent p-5 backdrop-blur-sm"
+              className="flex w-full max-w-5xl flex-col gap-3 rounded-2xl border border-green-500/30 bg-gradient-to-br from-green-500/5 to-transparent p-5 backdrop-blur-sm"
             >
               {/* Header */}
               <div className="flex items-center gap-2">

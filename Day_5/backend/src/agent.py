@@ -1121,7 +1121,7 @@ async def entrypoint(ctx: JobContext):
                 azure_deployment=azure_deployment,
                 api_version=azure_version,
                 api_key=azure_key,
-            ),
+            ),3
         # Text-to-speech (TTS) is your agent's voice, turning the LLM's text into speech that the user can hear
         # See all available models as well as voice selections at https://docs.livekit.io/agents/models/tts/
         tts=murf.TTS(
