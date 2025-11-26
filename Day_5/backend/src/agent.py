@@ -58,15 +58,17 @@ MANDATORY OPENING SEQUENCE (ALWAYS DO THIS FIRST):
 3. Ask for EMAIL: "What's your email address?"
 4. Ask for COMPANY: "Which company are you from?"
 5. Ask for ROLE: "What's your role there?" (Store as 'role' field)
-6. Ask for NEED: "What brings you to Razorpay today? What are you looking for?"
-7. Then say: "Great! Feel free to ask any questions about Razorpay, or I can help you schedule a demo."
+6. Ask for TEAM SIZE: "How big is your team?" (Store as 'team_size' field)
+7. Ask for TIMELINE: "When are you looking to implement this - now, soon, or later?" (Store as 'timeline' field)
+8. Ask for NEED: "What brings you to Razorpay today? What are you looking for?"
+9. Then say: "Great! Feel free to ask any questions about Razorpay, or I can help you schedule a demo."
 
 INFORMATION COLLECTION RULES:
-- ALWAYS ask for Name, Email, Company, Role, and Need FIRST before anything else
+- ALWAYS ask for Name, Email, Company, Role, Team Size, Timeline, and Need FIRST before anything else
 - Ask ONE question at a time, wait for answer
 - Use store_lead_info() to save each detail immediately
 - After collecting role, use detect_persona() to identify their persona type
-- Don't proceed to demos or questions until you have: name, email, company, role, need
+- Don't proceed to demos or questions until you have: name, email, company, role, team_size, timeline, need
 - If user asks questions before giving details, say: "Happy to help! But first, may I get your name?"
 
 AFTER COLLECTING INFO:
@@ -104,9 +106,13 @@ You: "Got it. Which company are you from?"
 User: "TechCorp"
 You: "Great! What's your role there?"
 User: "I'm a developer"
-You: "Perfect! What brings you to Razorpay today?"
+You: "Perfect! How big is your team?"
+User: "About 10 people"
+You: "Got it. When are you looking to implement this - now, soon, or later?"
+User: "We need it ASAP"
+You: "Understood! What brings you to Razorpay today?"
 User: "Need payment gateway"
-You: "Excellent! As a developer, I can show you our API integration. Feel free to ask questions, or I can help schedule a demo."
+You: "Excellent! As a developer with an urgent need, I can show you our quick API integration. Feel free to ask questions, or I can help schedule a demo."
 
 AVOID: Long explanations, skipping info collection, making up meeting times
 FOCUS: Collect info FIRST → Answer questions → Book demo""",
@@ -138,7 +144,7 @@ FOCUS: Collect info FIRST → Answer questions → Book demo""",
     
     def _has_required_info(self) -> bool:
         """Check if all required information has been collected"""
-        required_fields = ["name", "email", "company", "role", "use_case"]
+        required_fields = ["name", "email", "company", "role", "team_size", "timeline", "use_case"]
         return all(self.lead_data.get(field) for field in required_fields)
     
     def _get_missing_info(self) -> list:
@@ -148,6 +154,8 @@ FOCUS: Collect info FIRST → Answer questions → Book demo""",
             "email": "your email address", 
             "company": "your company name",
             "role": "your role",
+            "team_size": "your team size",
+            "timeline": "your timeline (now/soon/later)",
             "use_case": "what you're looking for"
         }
         return [label for field, label in required_fields.items() if not self.lead_data.get(field)]
@@ -361,7 +369,7 @@ FOCUS: Collect info FIRST → Answer questions → Book demo""",
     async def check_required_info(self, context: RunContext) -> str:
         """Check if all required information has been collected from the user."""
         if self._has_required_info():
-            return "All required information collected: ✅ Name, ✅ Email, ✅ Company, ✅ Role, ✅ Need. You can now answer questions or book meetings."
+            return "All required information collected: ✅ Name, ✅ Email, ✅ Company, ✅ Role, ✅ Team Size, ✅ Timeline, ✅ Need. You can now answer questions or book meetings."
         else:
             missing = self._get_missing_info()
             return f"Still need to collect: {', '.join(missing)}. Please ask for these details first."
@@ -479,18 +487,30 @@ FOCUS: Collect info FIRST → Answer questions → Book demo""",
                 decision_maker_level = level
                 break
         
+        # Infer timeline if not explicitly collected
+        timeline = self.lead_data.get("timeline", "unknown")
+        if timeline == "unknown":
+            urgency_keywords = {
+                "now": ["urgent", "asap", "immediately", "this week", "critical", "now"],
+                "soon": ["soon", "this month", "next month", "quarter", "planning"],
+                "later": ["eventually", "future", "someday", "later", "exploring"]
+            }
+            for time_level, keywords in urgency_keywords.items():
+                if any(keyword in conversation_text for keyword in keywords):
+                    timeline = time_level
+                    self.lead_data["timeline"] = timeline
+                    break
+        
+        # Map timeline to urgency level
         urgency_level = "low"
-        urgency_keywords = {
-            "high": ["urgent", "asap", "immediately", "this week", "critical"],
-            "medium": ["soon", "this month", "next month", "quarter"],
-            "low": ["eventually", "future", "someday", "later"]
-        }
+        if timeline == "now":
+            urgency_level = "high"
+        elif timeline == "soon":
+            urgency_level = "medium"
+        else:
+            urgency_level = "low"
         
-        for level, keywords in urgency_keywords.items():
-            if any(keyword in conversation_text for keyword in keywords):
-                urgency_level = level
-                break
-        
+        # Calculate fit score
         fit_score = 0
         if pain_points: fit_score += 25
         if budget_mentioned: fit_score += 25
@@ -500,15 +520,55 @@ FOCUS: Collect info FIRST → Answer questions → Book demo""",
         if urgency_level == "high": fit_score += 20
         elif urgency_level == "medium": fit_score += 10
         
+        # Get team size for scoring
+        team_size = self.lead_data.get("team_size", "unknown")
+        if team_size != "unknown":
+            try:
+                size_num = int(''.join(filter(str.isdigit, str(team_size))))
+                if size_num >= 50:
+                    fit_score += 10
+                elif size_num >= 10:
+                    fit_score += 5
+            except:
+                pass
+        
+        # Generate concise CRM-ready notes
+        name = self.lead_data.get("name", "Prospect")
+        company = self.lead_data.get("company", "Unknown Company")
+        role = self.lead_data.get("role", "Unknown Role")
+        use_case = self.lead_data.get("use_case", "payment solutions")
+        
+        notes_text = f"""
+LEAD SUMMARY:
+{name} from {company} ({role})
+Team Size: {team_size}
+Timeline: {timeline.upper()}
+
+NEEDS:
+- Use Case: {use_case}
+- Pain Points: {', '.join(pain_points) if pain_points else 'Not specified'}
+
+QUALIFICATION:
+- Decision Authority: {decision_maker_level.upper()}
+- Budget Discussed: {'Yes' if budget_mentioned else 'No'}
+- Urgency: {urgency_level.upper()}
+- Fit Score: {fit_score}/100
+
+NEXT STEPS:
+{self.lead_data.get('requested_next_step', 'Follow up with demo')}
+""".strip()
+        
         crm_notes = {
             "pain_points": pain_points or ["No specific pain points mentioned"],
             "budget_discussed": budget_mentioned,
             "decision_maker_level": decision_maker_level,
             "urgency_level": urgency_level,
+            "timeline": timeline,
+            "team_size": team_size,
             "fit_score": fit_score,
-            "key_interests": [self.lead_data.get("use_case", "Payment solutions")],
+            "key_interests": self.lead_data.get("key_interests", [self.lead_data.get("use_case", "Payment solutions")]),
             "next_steps": self.lead_data.get("requested_next_step", "Follow up"),
-            "notes": f"Prospect interested in {self.lead_data.get('use_case', 'payment solutions')}. {decision_maker_level.title()} authority level. {urgency_level.title()} urgency."
+            "notes": notes_text
         }
         
         self.lead_data["crm_notes"] = crm_notes
@@ -549,37 +609,7 @@ FOCUS: Collect info FIRST → Answer questions → Book demo""",
         }
         solution_text = solutions_map.get(persona, "We'll demonstrate how Razorpay can streamline your payment operations and drive business growth.")
         
-        # Build email with conversation insights
-        pain_points_section = ""
-        if pain_points:
-            pain_points_section = f"""
-🎯 Challenges You Mentioned:
-{chr(10).join([f"• {point}" for point in pain_points])}
-
-"""
-        
-        solution_section = f"""
-💡 How We'll Help:
-{solution_text}
-
-"""
-        
-        key_interests_section = ""
-        if key_interests:
-            key_interests_section = f"""
-📋 What We'll Cover in Demo:
-{chr(10).join([f"• {interest}" for interest in key_interests])}
-
-"""
-        
-        notes_section = ""
-        if notes:
-            notes_section = f"""
-Conversation Highlights:
-{notes}
-
-"""
-        
+        # Build concise email body (2-3 paragraphs)
         meeting_section = ""
         if meeting:
             meeting_section = f"""
@@ -588,24 +618,31 @@ Conversation Highlights:
 Date: {meeting['date']}
 Time: {meeting['time']}
 Duration: {meeting['duration']}
-Type: {meeting['type'].title()}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 """
         
+        # Paragraph 1: Thank you + context
+        pain_context = ""
+        if pain_points:
+            pain_context = f" I understand you're facing challenges with {', '.join(pain_points[:2])}."
+        
+        # Paragraph 2: Solution
+        # Paragraph 3: CTA
+        
         email_body = f"""Hi {name},
 
-Thank you for speaking with me today! I enjoyed learning about {company}'s {use_case} needs.
+Thank you for speaking with me today about {company}'s {use_case} needs.{pain_context}
 
-{meeting_section}{pain_points_section}{solution_section}{key_interests_section}{notes_section}
-I've prepared a customized demo specifically for {use_case}. We'll address each of your challenges and show you exactly how Razorpay can help.
+{solution_text}
 
-Looking forward to our conversation!
+{meeting_section}{'Looking forward to our demo! ' if meeting else 'Would you like to schedule a quick 30-minute demo? '}Reply to this email or click here to book a time that works for you.
 
 Best regards,
 Priya
 Sales Development Representative
 Razorpay
+priya@razorpay.com
 """
         
         email_draft = {
