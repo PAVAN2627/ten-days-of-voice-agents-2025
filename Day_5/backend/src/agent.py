@@ -57,14 +57,16 @@ MANDATORY OPENING SEQUENCE (ALWAYS DO THIS FIRST):
 2. Ask for NAME: "What's your name?"
 3. Ask for EMAIL: "What's your email address?"
 4. Ask for COMPANY: "Which company are you from?"
-5. Ask for NEED: "What brings you to Razorpay today? What are you looking for?"
-6. Then say: "Great! Feel free to ask any questions about Razorpay, or I can help you schedule a demo."
+5. Ask for ROLE: "What's your role there?" (Store as 'role' field)
+6. Ask for NEED: "What brings you to Razorpay today? What are you looking for?"
+7. Then say: "Great! Feel free to ask any questions about Razorpay, or I can help you schedule a demo."
 
 INFORMATION COLLECTION RULES:
-- ALWAYS ask for Name, Email, Company, and Need FIRST before anything else
+- ALWAYS ask for Name, Email, Company, Role, and Need FIRST before anything else
 - Ask ONE question at a time, wait for answer
 - Use store_lead_info() to save each detail immediately
-- Don't proceed to demos or questions until you have: name, email, company, need
+- After collecting role, use detect_persona() to identify their persona type
+- Don't proceed to demos or questions until you have: name, email, company, role, need
 - If user asks questions before giving details, say: "Happy to help! But first, may I get your name?"
 
 AFTER COLLECTING INFO:
@@ -100,9 +102,11 @@ You: "Nice to meet you, John! What's your email address?"
 User: "john@example.com"
 You: "Got it. Which company are you from?"
 User: "TechCorp"
+You: "Great! What's your role there?"
+User: "I'm a developer"
 You: "Perfect! What brings you to Razorpay today?"
 User: "Need payment gateway"
-You: "Excellent! Feel free to ask any questions, or I can help schedule a demo."
+You: "Excellent! As a developer, I can show you our API integration. Feel free to ask questions, or I can help schedule a demo."
 
 AVOID: Long explanations, skipping info collection, making up meeting times
 FOCUS: Collect info FIRST → Answer questions → Book demo""",
@@ -134,7 +138,7 @@ FOCUS: Collect info FIRST → Answer questions → Book demo""",
     
     def _has_required_info(self) -> bool:
         """Check if all required information has been collected"""
-        required_fields = ["name", "email", "company", "use_case"]
+        required_fields = ["name", "email", "company", "role", "use_case"]
         return all(self.lead_data.get(field) for field in required_fields)
     
     def _get_missing_info(self) -> list:
@@ -143,9 +147,30 @@ FOCUS: Collect info FIRST → Answer questions → Book demo""",
             "name": "your name",
             "email": "your email address", 
             "company": "your company name",
+            "role": "your role",
             "use_case": "what you're looking for"
         }
         return [label for field, label in required_fields.items() if not self.lead_data.get(field)]
+    
+    async def _save_lead_data(self) -> str:
+        """Save lead data to JSON file immediately"""
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"leads/lead_{timestamp}.json"
+        
+        lead_summary = {
+            "timestamp": datetime.now().isoformat(),
+            "lead_data": self.lead_data,
+            "conversation_transcript": self.conversation_transcript,
+            "detected_persona": self.detected_persona,
+            "is_returning_visitor": self.is_returning_visitor
+        }
+        
+        os.makedirs("leads", exist_ok=True)
+        with open(filename, "w") as f:
+            json.dump(lead_summary, f, indent=2)
+        
+        logger.info(f"💾 Lead data saved to {filename}")
+        return filename
     
     def _check_returning_visitor(self, email: str = None, name: str = None, company: str = None) -> Optional[Dict]:
         """Check if this is a returning visitor based on stored lead data"""
@@ -325,6 +350,9 @@ FOCUS: Collect info FIRST → Answer questions → Book demo""",
             else:
                 logger.warning(f"⚠️ Failed to send confirmation email")
         
+        # Save lead data immediately after booking
+        await self._save_lead_data()
+        
         name = self.lead_data.get("name", "")
         email = self.lead_data.get("email", "")
         return f"✅ Perfect! Meeting booked for {selected_slot['date']} at {selected_slot['time']}. Confirmation email sent to {email}. Thanks {name}!"
@@ -333,7 +361,7 @@ FOCUS: Collect info FIRST → Answer questions → Book demo""",
     async def check_required_info(self, context: RunContext) -> str:
         """Check if all required information has been collected from the user."""
         if self._has_required_info():
-            return "All required information collected: ✅ Name, ✅ Email, ✅ Company, ✅ Need. You can now answer questions or book meetings."
+            return "All required information collected: ✅ Name, ✅ Email, ✅ Company, ✅ Role, ✅ Need. You can now answer questions or book meetings."
         else:
             missing = self._get_missing_info()
             return f"Still need to collect: {', '.join(missing)}. Please ask for these details first."
@@ -387,6 +415,11 @@ FOCUS: Collect info FIRST → Answer questions → Book demo""",
         else:
             self.lead_data[field] = value
             logger.info(f"Stored lead info: {field} = {value}")
+            
+            # Auto-detect persona when role is stored
+            if field == "role":
+                await self.detect_persona(context, value)
+            
             return f"Got it, I've noted your {field}."
     
     @function_tool

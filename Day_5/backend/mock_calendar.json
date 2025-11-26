@@ -46,7 +46,7 @@
       "time": "4:00 PM",
       "duration": "30 minutes",
       "type": "demo",
-      "available": true
+      "available": false
     },
     {
       "id": "slot_7",
@@ -54,7 +54,7 @@
       "time": "9:00 AM",
       "duration": "30 minutes",
       "type": "demo",
-      "available": true
+      "available": false
     },
     {
       "id": "slot_8",
@@ -349,6 +349,30 @@
       "lead_email": "pavanmaligenai@gmail.com",
       "lead_company": "Apple",
       "booked_at": "2025-11-26T01:52:06.203520"
+    },
+    {
+      "id": "meeting_20251126_124537",
+      "slot_id": "slot_6",
+      "date": "2024-11-26",
+      "time": "4:00 PM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "lead_name": "Raj",
+      "lead_email": "pavanmaligenai@gmail.com",
+      "lead_company": "Brotherhood company",
+      "booked_at": "2025-11-26T12:45:37.507824"
+    },
+    {
+      "id": "meeting_20251126_130151",
+      "slot_id": "slot_7",
+      "date": "2024-11-27",
+      "time": "9:00 AM",
+      "duration": "30 minutes",
+      "type": "demo",
+      "lead_name": "Raj",
+      "lead_email": "pavanmaligenai@gmail.com",
+      "lead_company": "Brotherhood company",
+      "booked_at": "2025-11-26T13:01:51.980009"
     }
   ]
 }
