@@ -1,0 +1,385 @@
+{
+  "categories": {
+    "groceries": {
+      "name": "Groceries",
+      "items": [
+        {
+          "id": "rice_basmati",
+          "name": "Basmati Rice",
+          "price": 120,
+          "category": "groceries",
+          "brand": "India Gate",
+          "size": "1 kg",
+          "tags": ["staple", "indian", "vegan", "gluten-free"]
+        },
+        {
+          "id": "wheat_flour",
+          "name": "Wheat Flour (Atta)",
+          "price": 45,
+          "category": "groceries",
+          "brand": "Aashirvaad",
+          "size": "1 kg",
+          "tags": ["flour", "staple", "vegan"]
+        },
+        {
+          "id": "dal_toor",
+          "name": "Toor Dal",
+          "price": 85,
+          "category": "groceries",
+          "brand": "Tata Sampann",
+          "size": "500g",
+          "tags": ["pulses", "protein", "vegan", "gluten-free"]
+        },
+        {
+          "id": "dal_moong",
+          "name": "Moong Dal",
+          "price": 90,
+          "category": "groceries",
+          "brand": "Tata Sampann",
+          "size": "500g",
+          "tags": ["pulses", "protein", "vegan", "gluten-free"]
+        },
+        {
+          "id": "oil_mustard",
+          "name": "Mustard Oil",
+          "price": 180,
+          "category": "groceries",
+          "brand": "Fortune",
+          "size": "1 liter",
+          "tags": ["cooking oil", "indian", "vegan", "gluten-free"]
+        },
+        {
+          "id": "ghee_pure",
+          "name": "Pure Ghee",
+          "price": 520,
+          "category": "groceries",
+          "brand": "Amul",
+          "size": "500ml",
+          "tags": ["dairy", "cooking", "vegetarian", "gluten-free"]
+        },
+        {
+          "id": "onion_red",
+          "name": "Red Onions",
+          "price": 30,
+          "category": "groceries",
+          "brand": "Fresh",
+          "size": "1 kg",
+          "tags": ["vegetables", "fresh", "vegan", "gluten-free"]
+        },
+        {
+          "id": "tomato_fresh",
+          "name": "Fresh Tomatoes",
+          "price": 40,
+          "category": "groceries",
+          "brand": "Fresh",
+          "size": "1 kg",
+          "tags": ["vegetables", "fresh", "vegan", "gluten-free"]
+        },
+        {
+          "id": "potato_fresh",
+          "name": "Potatoes",
+          "price": 25,
+          "category": "groceries",
+          "brand": "Fresh",
+          "size": "1 kg",
+          "tags": ["vegetables", "staple", "vegan", "gluten-free"]
+        },
+        {
+          "id": "ginger_fresh",
+          "name": "Fresh Ginger",
+          "price": 80,
+          "category": "groceries",
+          "brand": "Fresh",
+          "size": "250g",
+          "tags": ["spices", "fresh", "vegan", "gluten-free"]
+        },
+        {
+          "id": "garlic_fresh",
+          "name": "Fresh Garlic",
+          "price": 120,
+          "category": "groceries",
+          "brand": "Fresh",
+          "size": "250g",
+          "tags": ["spices", "fresh", "vegan", "gluten-free"]
+        },
+        {
+          "id": "milk_full_cream",
+          "name": "Full Cream Milk",
+          "price": 60,
+          "category": "groceries",
+          "brand": "Amul",
+          "size": "1 liter",
+          "tags": ["dairy", "fresh", "vegetarian", "gluten-free"]
+        }
+      ]
+    },
+    "spices": {
+      "name": "Spices & Masalas",
+      "items": [
+        {
+          "id": "turmeric_powder",
+          "name": "Turmeric Powder",
+          "price": 45,
+          "category": "spices",
+          "brand": "MDH",
+          "size": "100g",
+          "tags": ["spices", "indian", "powder", "vegan", "gluten-free"]
+        },
+        {
+          "id": "red_chili_powder",
+          "name": "Red Chili Powder",
+          "price": 55,
+          "category": "spices",
+          "brand": "MDH",
+          "size": "100g",
+          "tags": ["spices", "hot", "powder", "vegan", "gluten-free"]
+        },
+        {
+          "id": "garam_masala",
+          "name": "Garam Masala",
+          "price": 65,
+          "category": "spices",
+          "brand": "Everest",
+          "size": "50g",
+          "tags": ["spices", "blend", "indian", "vegan", "gluten-free"]
+        },
+        {
+          "id": "cumin_powder",
+          "name": "Cumin Powder",
+          "price": 40,
+          "category": "spices",
+          "brand": "Everest",
+          "size": "100g",
+          "tags": ["spices", "powder", "vegan", "gluten-free"]
+        },
+        {
+          "id": "coriander_powder",
+          "name": "Coriander Powder",
+          "price": 35,
+          "category": "spices",
+          "brand": "Everest",
+          "size": "100g",
+          "tags": ["spices", "powder", "vegan", "gluten-free"]
+        }
+      ]
+    },
+    "snacks": {
+      "name": "Snacks & Namkeen",
+      "items": [
+        {
+          "id": "namkeen_mixture",
+          "name": "Mixture Namkeen",
+          "price": 80,
+          "category": "snacks",
+          "brand": "Haldiram's",
+          "size": "200g",
+          "tags": ["crispy", "salty", "indian", "vegetarian"]
+        },
+        {
+          "id": "bhujia_aloo",
+          "name": "Aloo Bhujia",
+          "price": 60,
+          "category": "snacks",
+          "brand": "Haldiram's",
+          "size": "150g",
+          "tags": ["crispy", "spicy", "vegan"]
+        },
+        {
+          "id": "biscuits_parle_g",
+          "name": "Parle-G Biscuits",
+          "price": 20,
+          "category": "snacks",
+          "brand": "Parle",
+          "size": "100g",
+          "tags": ["sweet", "tea-time", "vegetarian"]
+        },
+        {
+          "id": "mathri_punjabi",
+          "name": "Punjabi Mathri",
+          "price": 70,
+          "category": "snacks",
+          "brand": "Bikano",
+          "size": "200g",
+          "tags": ["crispy", "traditional", "vegan"]
+        },
+        {
+          "id": "samosa_frozen",
+          "name": "Frozen Samosas",
+          "price": 120,
+          "category": "snacks",
+          "brand": "McCain",
+          "size": "400g (8 pieces)",
+          "tags": ["frozen", "fried", "spicy", "vegetarian"]
+        }
+      ]
+    },
+    "prepared_food": {
+      "name": "Ready to Eat",
+      "items": [
+        {
+          "id": "rajma_ready",
+          "name": "Ready to Eat Rajma",
+          "price": 85,
+          "category": "prepared_food",
+          "brand": "MTR",
+          "size": "300g",
+          "tags": ["instant", "north-indian", "curry", "vegan"]
+        },
+        {
+          "id": "dal_makhani_ready",
+          "name": "Ready to Eat Dal Makhani",
+          "price": 90,
+          "category": "prepared_food",
+          "brand": "MTR",
+          "size": "300g",
+          "tags": ["instant", "north-indian", "curry", "vegetarian"]
+        },
+        {
+          "id": "biryani_veg_ready",
+          "name": "Vegetable Biryani",
+          "price": 110,
+          "category": "prepared_food",
+          "brand": "Kohinoor",
+          "size": "250g",
+          "tags": ["instant", "rice", "spicy", "vegan"]
+        },
+        {
+          "id": "chole_ready",
+          "name": "Ready to Eat Chole",
+          "price": 80,
+          "category": "prepared_food",
+          "brand": "Gits",
+          "size": "285g",
+          "tags": ["instant", "north-indian", "spicy", "vegan"]
+        },
+        {
+          "id": "upma_mix",
+          "name": "Upma Mix",
+          "price": 45,
+          "category": "prepared_food",
+          "brand": "Gits",
+          "size": "200g",
+          "tags": ["instant", "south-indian", "breakfast", "vegan"]
+        }
+      ]
+    },
+    "beverages": {
+      "name": "Beverages",
+      "items": [
+        {
+          "id": "tea_assam",
+          "name": "Assam Tea",
+          "price": 180,
+          "category": "beverages",
+          "brand": "Tata Tea",
+          "size": "500g",
+          "tags": ["tea", "strong", "indian", "vegan", "gluten-free"]
+        },
+        {
+          "id": "coffee_filter",
+          "name": "Filter Coffee Powder",
+          "price": 220,
+          "category": "beverages",
+          "brand": "Bru",
+          "size": "500g",
+          "tags": ["coffee", "south-indian", "vegan", "gluten-free"]
+        },
+        {
+          "id": "lassi_mango",
+          "name": "Mango Lassi",
+          "price": 45,
+          "category": "beverages",
+          "brand": "Amul",
+          "size": "200ml",
+          "tags": ["dairy", "sweet", "mango", "vegetarian", "gluten-free"]
+        },
+        {
+          "id": "nimbu_paani_mix",
+          "name": "Nimbu Paani Mix",
+          "price": 35,
+          "category": "beverages",
+          "brand": "Real",
+          "size": "200ml",
+          "tags": ["refreshing", "citrus", "vegan", "gluten-free"]
+        },
+        {
+          "id": "coconut_water",
+          "name": "Coconut Water",
+          "price": 40,
+          "category": "beverages",
+          "brand": "Real",
+          "size": "200ml",
+          "tags": ["natural", "healthy", "refreshing", "vegan", "gluten-free"]
+        }
+      ]
+    },
+    "sweets": {
+      "name": "Sweets & Desserts",
+      "items": [
+        {
+          "id": "gulab_jamun",
+          "name": "Gulab Jamun",
+          "price": 150,
+          "category": "sweets",
+          "brand": "Haldiram's",
+          "size": "500g",
+          "tags": ["sweet", "traditional", "festival", "vegetarian"]
+        },
+        {
+          "id": "rasgulla_bengali",
+          "name": "Bengali Rasgulla",
+          "price": 120,
+          "category": "sweets",
+          "brand": "K.C. Das",
+          "size": "400g",
+          "tags": ["sweet", "bengali", "spongy", "vegetarian", "gluten-free"]
+        },
+        {
+          "id": "kaju_katli",
+          "name": "Kaju Katli",
+          "price": 450,
+          "category": "sweets",
+          "brand": "Haldiram's",
+          "size": "250g",
+          "tags": ["sweet", "premium", "cashew", "vegetarian", "gluten-free"]
+        },
+        {
+          "id": "laddu_motichoor",
+          "name": "Motichoor Laddu",
+          "price": 180,
+          "category": "sweets",
+          "brand": "Bikano",
+          "size": "400g",
+          "tags": ["sweet", "traditional", "festival", "vegetarian", "gluten-free"]
+        }
+      ]
+    }
+  },
+  "recipes": {
+    "dal_chawal": {
+      "name": "Dal Chawal",
+      "ingredients": ["rice_basmati", "dal_toor", "turmeric_powder", "ghee_pure"],
+      "serves": 4
+    },
+    "rajma_chawal": {
+      "name": "Rajma Chawal",
+      "ingredients": ["rice_basmati", "rajma_ready", "onion_red"],
+      "serves": 2
+    },
+    "aloo_paratha": {
+      "name": "Aloo Paratha",
+      "ingredients": ["wheat_flour", "potato_fresh", "ghee_pure", "onion_red"],
+      "serves": 4
+    },
+    "tea_time": {
+      "name": "Tea Time Snacks",
+      "ingredients": ["tea_assam", "biscuits_parle_g", "namkeen_mixture"],
+      "serves": 4
+    },
+    "basic_indian_cooking": {
+      "name": "Basic Indian Cooking Essentials",
+      "ingredients": ["rice_basmati", "wheat_flour", "dal_toor", "oil_mustard", "turmeric_powder", "red_chili_powder", "onion_red", "tomato_fresh"],
+      "serves": 10
+    }
+  }
+}

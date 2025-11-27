@@ -1,0 +1,205 @@
+/* DailyMart Branding Colors: Blue #0066cc, Green #00aa66 */
+
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0066cc 0%, #00aa66 100%);
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  height: 40px;
+  width: auto;
+}
+
+.status {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.welcomeScreen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 20px;
+}
+
+.welcomeContent {
+  text-align: center;
+  max-width: 600px;
+}
+
+.welcomeLogo {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 30px;
+  border-radius: 50%;
+  background: white;
+  padding: 20px;
+}
+
+.welcomeContent h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.welcomeContent p {
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+  opacity: 0.9;
+}
+
+.productPreview {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  border-radius: 15px;
+  margin-bottom: 40px;
+}
+
+.productPreview h3 {
+  margin-bottom: 20px;
+  font-size: 1.3rem;
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.productItem {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 15px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+.startButton {
+  background: #00aa66;
+  color: white;
+  border: none;
+  padding: 20px 40px;
+  font-size: 1.3rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.startButton:hover {
+  background: #008855;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.startButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.splitScreen {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 70vh;
+  gap: 2px;
+}
+
+.agentSide {
+  background: rgba(0, 102, 204, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.userSide {
+  background: rgba(0, 170, 102, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.agentAvatar, .userAvatar {
+  text-align: center;
+}
+
+.avatarCircle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.avatarText {
+  font-size: 3rem;
+}
+
+.agentAvatar h3, .userAvatar h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.agentAvatar p, .userAvatar p {
+  opacity: 0.8;
+  font-size: 1rem;
+}
+
+.controls {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.endButton {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.1rem;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.endButton:hover {
+  background: #c82333;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .splitScreen {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+  
+  .welcomeContent h1 {
+    font-size: 2rem;
+  }
+  
+  .productGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
