@@ -68,8 +68,12 @@ class DailyMartAgent:
             return {}
     
     def save_users(self):
-        with open(USERS_FILE, 'w') as f:
-            json.dump(self.users, f, indent=2)
+        try:
+            with open(USERS_FILE, 'w') as f:
+                json.dump(self.users, f, indent=2)
+            logger.info(f"Saved {len(self.users)} users to {USERS_FILE}")
+        except Exception as e:
+            logger.error(f"Failed to save users: {e}")
     
     def load_orders(self):
         try:
@@ -79,8 +83,12 @@ class DailyMartAgent:
             return {}
     
     def save_orders(self):
-        with open(ORDERS_FILE, 'w') as f:
-            json.dump(self.orders, f, indent=2)
+        try:
+            with open(ORDERS_FILE, 'w') as f:
+                json.dump(self.orders, f, indent=2)
+            logger.info(f"Saved {len(self.orders)} orders to {ORDERS_FILE}")
+        except Exception as e:
+            logger.error(f"Failed to save orders: {e}")
     
     def normalize_password(self, password: str) -> str:
         # Convert spoken numbers to digits
@@ -470,12 +478,13 @@ async def add_item_to_cart(
         if agent.dietary_filter not in item_tags:
             return f"Sorry, {item['name']} doesn't match your {agent.dietary_filter} dietary preference."
     
-    # Check budget limit
+    # Check budget limit (warning only, don't block)
+    budget_warning = ""
     if agent.budget_limit:
         current_total = sum(cart_item["quantity"] * cart_item["price"] for cart_item in agent.cart)
         new_total = current_total + (quantity * item["price"])
         if new_total > agent.budget_limit:
-            return f"Adding {item['name']} would exceed your budget limit of ₹{agent.budget_limit}. Current total would be ₹{new_total}."
+            budget_warning = f" Note: This exceeds your budget limit of ₹{agent.budget_limit}. New total: ₹{new_total}."
     
     # Add new item to cart
     cart_item = {
@@ -488,7 +497,7 @@ async def add_item_to_cart(
     }
     agent.cart.append(cart_item)
     total_price = quantity * item["price"]
-    return f"Added {quantity} {item['name']} to your cart (₹{total_price})"
+    return f"Added {quantity} {item['name']} to your cart (₹{total_price}){budget_warning}"
 
 @function_tool
 async def add_recipe_ingredients(
@@ -1047,8 +1056,10 @@ class DailyMartVoiceAgent(Agent):
             
             BUDGET & DIETARY:
             - When user sets budget limit like "keep it under 1000" - use set_budget_limit() function
+            - Budget limits are WARNINGS only - still add items if user insists (says "continue", "yes", "add anyway")
             - When user wants dietary filter like "only vegan items" - use set_dietary_filter() function
-            - Always check budget and dietary constraints when adding items
+            - Dietary filters are STRICT - don't add items that don't match
+            - If user says "continue" or "yes" after budget warning, proceed with adding the item
             
             DELIVERY CHARGES & DISCOUNTS:
             - When user asks about delivery charges - use check_delivery_charges() function

@@ -147,5 +147,99 @@
     "timestamp": "2025-11-28T02:46:14.141343",
     "delivery_address": "AT Post Pal",
     "last_updated": "2025-11-28T02:46:45.861241"
+  },
+  "ORD_20251128_153807": {
+    "order_id": "ORD_20251128_153807",
+    "customer_email": "sanketmali0281@gmail.com",
+    "customer_name": "Sanket",
+    "items": [
+      {
+        "id": "wheat_flour",
+        "name": "Wheat Flour (Atta)",
+        "price": 45,
+        "quantity": 1,
+        "brand": "Aashirvaad",
+        "size": "1 kg"
+      },
+      {
+        "id": "potato_fresh",
+        "name": "Potatoes",
+        "price": 25,
+        "quantity": 1,
+        "brand": "Fresh",
+        "size": "1 kg"
+      },
+      {
+        "id": "ghee_pure",
+        "name": "Pure Ghee",
+        "price": 520,
+        "quantity": 1,
+        "brand": "Amul",
+        "size": "500ml"
+      },
+      {
+        "id": "onion_red",
+        "name": "Red Onions",
+        "price": 30,
+        "quantity": 1,
+        "brand": "Fresh",
+        "size": "1 kg"
+      },
+      {
+        "id": "kaju_katli",
+        "name": "Kaju Katli",
+        "price": 450,
+        "quantity": 1,
+        "brand": "Haldiram's",
+        "size": "250g"
+      }
+    ],
+    "subtotal": 1070,
+    "delivery_charge": 0,
+    "discount": 0,
+    "total": 1070,
+    "status": "received",
+    "timestamp": "2025-11-28T15:38:07.949514",
+    "delivery_address": "Pune Maharashtra",
+    "last_updated": "2025-11-28T15:38:28.609363"
+  },
+  "ORD_20251128_154232": {
+    "order_id": "ORD_20251128_154232",
+    "customer_email": "pavanmaligenai@gmail.com",
+    "customer_name": "Pavan Mali",
+    "items": [
+      {
+        "id": "rice_basmati",
+        "name": "Basmati Rice",
+        "price": 120,
+        "quantity": 10,
+        "brand": "India Gate",
+        "size": "1 kg"
+      },
+      {
+        "id": "rasgulla_bengali",
+        "name": "Bengali Rasgulla",
+        "price": 120,
+        "quantity": 1,
+        "brand": "K.C. Das",
+        "size": "400g"
+      },
+      {
+        "id": "dal_toor",
+        "name": "Toor Dal",
+        "price": 85,
+        "quantity": 2,
+        "brand": "Tata Sampann",
+        "size": "500g"
+      }
+    ],
+    "subtotal": 1490,
+    "delivery_charge": 0,
+    "discount": 0,
+    "total": 1490,
+    "status": "received",
+    "timestamp": "2025-11-28T15:42:32.339935",
+    "delivery_address": "AT Post Pal",
+    "last_updated": "2025-11-28T15:43:12.428544"
   }
 }
