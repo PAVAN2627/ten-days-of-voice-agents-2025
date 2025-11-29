@@ -1,0 +1,110 @@
+{
+  "universe": "horror",
+  "player": {
+    "name": "Alex",
+    "hp": 46,
+    "max_hp": 100,
+    "strength": 10,
+    "intelligence": 10,
+    "luck": 10,
+    "inventory": [
+      "flashlight",
+      "old key",
+      "first aid kit"
+    ],
+    "status": "Healthy"
+  },
+  "npcs": {
+    "ghost": {
+      "name": "Sarah",
+      "role": "lost spirit",
+      "attitude": "sad",
+      "alive": true,
+      "location": "mansion"
+    },
+    "caretaker": {
+      "name": "Old Tom",
+      "role": "cemetery keeper",
+      "attitude": "mysterious",
+      "alive": true,
+      "location": "cemetery"
+    }
+  },
+  "locations": {
+    "mansion": {
+      "name": "Old Mansion",
+      "description": "A scary old house with creaking floors",
+      "paths": [
+        "basement",
+        "garden"
+      ]
+    },
+    "basement": {
+      "name": "Dark Basement",
+      "description": "Cold and dark with strange sounds",
+      "paths": [
+        "mansion"
+      ]
+    },
+    "garden": {
+      "name": "Dead Garden",
+      "description": "Old garden with dead plants",
+      "paths": [
+        "mansion",
+        "cemetery"
+      ]
+    },
+    "cemetery": {
+      "name": "Spooky Cemetery",
+      "description": "Old graves with broken stones",
+      "paths": [
+        "garden"
+      ]
+    }
+  },
+  "current_location": "basement",
+  "quests": [],
+  "events": [
+    {
+      "description": "Game started - took 16 damage",
+      "timestamp": "2025-11-29T16:07:49.708745",
+      "location": "mansion"
+    },
+    {
+      "description": "Moved to basement",
+      "timestamp": "2025-11-29T16:09:03.722153",
+      "location": "basement"
+    },
+    {
+      "description": "Took 25 damage from fall",
+      "timestamp": "2025-11-29T16:09:03.722153",
+      "location": "basement"
+    },
+    {
+      "description": "Used/lost medkit",
+      "timestamp": "2025-11-29T16:09:27.531820",
+      "location": "basement"
+    },
+    {
+      "description": "Took 22 damage from shadow creature",
+      "timestamp": "2025-11-29T16:10:52.797396",
+      "location": "basement"
+    },
+    {
+      "description": "Acquired first aid kit",
+      "timestamp": "2025-11-29T16:10:52.808521",
+      "location": "basement"
+    },
+    {
+      "description": "Took 11 damage from possessed object",
+      "timestamp": "2025-11-29T16:11:31.294219",
+      "location": "basement"
+    },
+    {
+      "description": "Took 10 damage from trap",
+      "timestamp": "2025-11-29T16:12:09.859653",
+      "location": "basement"
+    }
+  ],
+  "turn_count": 1
+}

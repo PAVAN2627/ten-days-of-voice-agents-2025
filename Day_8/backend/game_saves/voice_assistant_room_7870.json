@@ -1,0 +1,125 @@
+{
+  "universe": "post_apocalypse",
+  "player": {
+    "name": "Pavan",
+    "hp": 67,
+    "max_hp": 100,
+    "strength": 10,
+    "intelligence": 10,
+    "luck": 10,
+    "inventory": [
+      "water bottle",
+      "scrap metal",
+      "medkit"
+    ],
+    "status": "Healthy"
+  },
+  "npcs": {
+    "survivor": {
+      "name": "Maya",
+      "role": "shelter leader",
+      "attitude": "cautious",
+      "alive": true,
+      "location": "shelter"
+    },
+    "raider": {
+      "name": "Scar",
+      "role": "wasteland raider",
+      "attitude": "hostile",
+      "alive": true,
+      "location": "wasteland"
+    }
+  },
+  "locations": {
+    "wasteland": {
+      "name": "Barren Wasteland",
+      "description": "Cracked earth under a red sky",
+      "paths": [
+        "bunker",
+        "ruins"
+      ]
+    },
+    "bunker": {
+      "name": "Underground Bunker",
+      "description": "Safe but claustrophobic",
+      "paths": [
+        "wasteland"
+      ]
+    },
+    "ruins": {
+      "name": "City Ruins",
+      "description": "Collapsed buildings and debris",
+      "paths": [
+        "wasteland",
+        "shelter"
+      ]
+    },
+    "shelter": {
+      "name": "Survivor Shelter",
+      "description": "A makeshift camp",
+      "paths": [
+        "ruins"
+      ]
+    }
+  },
+  "current_location": "wasteland",
+  "quests": [],
+  "events": [
+    {
+      "description": "Game started - took 17 damage",
+      "timestamp": "2025-11-29T15:09:16.958131",
+      "location": "wasteland"
+    },
+    {
+      "description": "Took 11 damage from trap",
+      "timestamp": "2025-11-29T15:09:39.424917",
+      "location": "wasteland"
+    },
+    {
+      "description": "Took 17 damage from radiation",
+      "timestamp": "2025-11-29T15:10:18.611455",
+      "location": "wasteland"
+    },
+    {
+      "description": "Acquired medkit",
+      "timestamp": "2025-11-29T15:10:18.671562",
+      "location": "wasteland"
+    },
+    {
+      "description": "Used/lost medkit",
+      "timestamp": "2025-11-29T15:10:44.374069",
+      "location": "wasteland"
+    },
+    {
+      "description": "Took 18 damage from radiation",
+      "timestamp": "2025-11-29T15:11:35.595615",
+      "location": "wasteland"
+    },
+    {
+      "description": "Acquired medkit",
+      "timestamp": "2025-11-29T15:11:35.604736",
+      "location": "wasteland"
+    },
+    {
+      "description": "Used/lost medkit",
+      "timestamp": "2025-11-29T15:12:04.614124",
+      "location": "wasteland"
+    },
+    {
+      "description": "Took 18 damage from radiation",
+      "timestamp": "2025-11-29T15:13:01.220528",
+      "location": "wasteland"
+    },
+    {
+      "description": "Took 12 damage from radiation",
+      "timestamp": "2025-11-29T15:14:26.382400",
+      "location": "wasteland"
+    },
+    {
+      "description": "Acquired medkit",
+      "timestamp": "2025-11-29T15:14:26.392372",
+      "location": "wasteland"
+    }
+  ],
+  "turn_count": 0
+}

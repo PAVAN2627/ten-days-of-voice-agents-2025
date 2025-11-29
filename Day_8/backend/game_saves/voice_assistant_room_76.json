@@ -1,0 +1,129 @@
+{
+  "universe": "post_apocalypse",
+  "player": {
+    "name": "Pavan",
+    "hp": 65,
+    "max_hp": 100,
+    "strength": 10,
+    "intelligence": 10,
+    "luck": 10,
+    "inventory": [
+      "water bottle",
+      "scrap metal"
+    ],
+    "status": "Healthy"
+  },
+  "npcs": {
+    "survivor": {
+      "name": "Maya",
+      "role": "shelter leader",
+      "attitude": "cautious",
+      "alive": true,
+      "location": "shelter"
+    },
+    "raider": {
+      "name": "Scar",
+      "role": "wasteland raider",
+      "attitude": "hostile",
+      "alive": true,
+      "location": "wasteland"
+    }
+  },
+  "locations": {
+    "wasteland": {
+      "name": "Barren Wasteland",
+      "description": "Cracked earth under a red sky",
+      "paths": [
+        "bunker",
+        "ruins"
+      ]
+    },
+    "bunker": {
+      "name": "Underground Bunker",
+      "description": "Safe but claustrophobic",
+      "paths": [
+        "wasteland"
+      ]
+    },
+    "ruins": {
+      "name": "City Ruins",
+      "description": "Collapsed buildings and debris",
+      "paths": [
+        "wasteland",
+        "shelter"
+      ]
+    },
+    "shelter": {
+      "name": "Survivor Shelter",
+      "description": "A makeshift camp",
+      "paths": [
+        "ruins"
+      ]
+    }
+  },
+  "current_location": "wasteland",
+  "quests": [],
+  "events": [
+    {
+      "description": "Game started - took 15 damage",
+      "timestamp": "2025-11-29T15:23:05.853683",
+      "location": "wasteland"
+    },
+    {
+      "description": "Took 10 damage from radiation",
+      "timestamp": "2025-11-29T15:23:43.390307",
+      "location": "wasteland"
+    },
+    {
+      "description": "Moved to ruins",
+      "timestamp": "2025-11-29T15:24:46.993789",
+      "location": "ruins"
+    },
+    {
+      "description": "Took 15 damage from radiation",
+      "timestamp": "2025-11-29T15:24:46.993789",
+      "location": "ruins"
+    },
+    {
+      "description": "Took 15 damage from raider ambush",
+      "timestamp": "2025-11-29T15:25:58.462272",
+      "location": "ruins"
+    },
+    {
+      "description": "Acquired medkit",
+      "timestamp": "2025-11-29T15:25:58.474402",
+      "location": "ruins"
+    },
+    {
+      "description": "Used/lost medkit",
+      "timestamp": "2025-11-29T15:26:35.829467",
+      "location": "ruins"
+    },
+    {
+      "description": "Took 17 damage from zombie attack",
+      "timestamp": "2025-11-29T15:27:57.221462",
+      "location": "ruins"
+    },
+    {
+      "description": "Acquired medkit",
+      "timestamp": "2025-11-29T15:27:57.231021",
+      "location": "ruins"
+    },
+    {
+      "description": "Moved to wasteland",
+      "timestamp": "2025-11-29T15:29:16.695144",
+      "location": "wasteland"
+    },
+    {
+      "description": "Took 23 damage from trap",
+      "timestamp": "2025-11-29T15:29:16.695144",
+      "location": "wasteland"
+    },
+    {
+      "description": "Used/lost medkit",
+      "timestamp": "2025-11-29T15:29:48.931353",
+      "location": "wasteland"
+    }
+  ],
+  "turn_count": 2
+}

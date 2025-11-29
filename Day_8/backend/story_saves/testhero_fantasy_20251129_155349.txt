@@ -1,0 +1,30 @@
+======================================================================
+                     TestHero's Fantasy Adventure                     
+======================================================================
+
+A Fantasy Adventure
+Starring: TestHero
+Date: November 29, 2025
+
+======================================================================
+
+Welcome TestHero! You enter the Village Square. A wolf attacks you!
+
+TestHero attack the wolf with TestHero's sword
+
+You swing your sword! The wolf is defeated!
+
+
+======================================================================
+THE END
+======================================================================
+
+
+----------------------------------------------------------------------
+FINAL STATISTICS
+----------------------------------------------------------------------
+Health: 75/100 (Healthy)
+Strength: 10 | Intelligence: 10 | Luck: 10
+Final Inventory: rusty sword, leather pouch
+Final Location: Village Square
+Adventure Length: 3 turns

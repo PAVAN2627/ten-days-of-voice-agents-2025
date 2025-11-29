@@ -1,0 +1,95 @@
+{
+  "universe": "horror",
+  "player": {
+    "name": "Pavan",
+    "hp": 72,
+    "max_hp": 100,
+    "strength": 10,
+    "intelligence": 10,
+    "luck": 10,
+    "inventory": [
+      "flashlight",
+      "old key",
+      "silver locket"
+    ],
+    "status": "Healthy"
+  },
+  "npcs": {
+    "ghost": {
+      "name": "Sarah",
+      "role": "lost spirit",
+      "attitude": "sad",
+      "alive": true,
+      "location": "mansion"
+    },
+    "caretaker": {
+      "name": "Old Tom",
+      "role": "cemetery keeper",
+      "attitude": "mysterious",
+      "alive": true,
+      "location": "cemetery"
+    }
+  },
+  "locations": {
+    "mansion": {
+      "name": "Old Mansion",
+      "description": "A scary old house with creaking floors",
+      "paths": [
+        "basement",
+        "garden"
+      ]
+    },
+    "basement": {
+      "name": "Dark Basement",
+      "description": "Cold and dark with strange sounds",
+      "paths": [
+        "mansion"
+      ]
+    },
+    "garden": {
+      "name": "Dead Garden",
+      "description": "Old garden with dead plants",
+      "paths": [
+        "mansion",
+        "cemetery"
+      ]
+    },
+    "cemetery": {
+      "name": "Spooky Cemetery",
+      "description": "Old graves with broken stones",
+      "paths": [
+        "garden"
+      ]
+    }
+  },
+  "current_location": "mansion",
+  "quests": [],
+  "events": [
+    {
+      "description": "Game started - took 25 damage",
+      "timestamp": "2025-11-29T15:45:28.082422",
+      "location": "mansion"
+    },
+    {
+      "description": "Took 21 damage from shadow creature",
+      "timestamp": "2025-11-29T15:46:14.742045",
+      "location": "mansion"
+    },
+    {
+      "description": "Used/lost medkit",
+      "timestamp": "2025-11-29T15:46:47.091340",
+      "location": "mansion"
+    },
+    {
+      "description": "Took 12 damage from possessed object",
+      "timestamp": "2025-11-29T15:48:12.622832",
+      "location": "mansion"
+    },
+    {
+      "description": "Acquired silver locket",
+      "timestamp": "2025-11-29T15:48:42.012504",
+      "location": "mansion"
+    }
+  ],
+  "turn_count": 0
+}

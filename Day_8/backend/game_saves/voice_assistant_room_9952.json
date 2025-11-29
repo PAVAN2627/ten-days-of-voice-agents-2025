@@ -1,0 +1,75 @@
+{
+  "universe": "post_apocalypse",
+  "player": {
+    "name": "Alex",
+    "hp": 78,
+    "max_hp": 100,
+    "strength": 10,
+    "intelligence": 10,
+    "luck": 10,
+    "inventory": [
+      "water bottle",
+      "scrap metal",
+      "medkit"
+    ],
+    "status": "Healthy"
+  },
+  "npcs": {
+    "survivor": {
+      "name": "Maya",
+      "role": "shelter leader",
+      "attitude": "cautious",
+      "alive": true,
+      "location": "shelter"
+    },
+    "raider": {
+      "name": "Scar",
+      "role": "wasteland raider",
+      "attitude": "hostile",
+      "alive": true,
+      "location": "wasteland"
+    }
+  },
+  "locations": {
+    "wasteland": {
+      "name": "Barren Wasteland",
+      "description": "Cracked earth under a red sky",
+      "paths": [
+        "bunker",
+        "ruins"
+      ]
+    },
+    "bunker": {
+      "name": "Underground Bunker",
+      "description": "Safe but claustrophobic",
+      "paths": [
+        "wasteland"
+      ]
+    },
+    "ruins": {
+      "name": "City Ruins",
+      "description": "Collapsed buildings and debris",
+      "paths": [
+        "wasteland",
+        "shelter"
+      ]
+    },
+    "shelter": {
+      "name": "Survivor Shelter",
+      "description": "A makeshift camp",
+      "paths": [
+        "ruins"
+      ]
+    }
+  },
+  "current_location": "wasteland",
+  "quests": [],
+  "events": [
+    {
+      "description": "Game started - took 22 damage",
+      "timestamp": "2025-11-29T16:06:14.136335",
+      "location": "wasteland"
+    }
+  ],
+  "turn_count": 0
+}
