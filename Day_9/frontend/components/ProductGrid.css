@@ -1,0 +1,143 @@
+.product-grid-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.filters-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  color: white;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.search-input,
+.category-select,
+.price-slider {
+  padding: 10px 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus,
+.category-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+  transform: scale(1.02);
+}
+
+.search-input {
+  background: white;
+  color: #333;
+}
+
+.category-select {
+  background: white;
+  color: #333;
+  cursor: pointer;
+}
+
+.price-slider {
+  cursor: pointer;
+  accent-color: white;
+}
+
+.results-info {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-left: 4px solid #667eea;
+  border-radius: 8px;
+}
+
+.results-info h3 {
+  margin: 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+  }
+
+  .filters-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+.product-grid-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  font-size: 18px;
+  color: #667eea;
+  font-weight: 600;
+}
+
+.error-message {
+  padding: 15px;
+  margin: 15px 0;
+  background: #fee;
+  color: #c33;
+  border-left: 4px solid #c33;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.no-products {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  text-align: center;
+}
+
+.no-products p {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.no-products button {
+  padding: 10px 20px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.no-products button:hover {
+  background: #764ba2;
+}

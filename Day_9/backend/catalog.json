@@ -1,0 +1,504 @@
+{
+  "products": [
+    {
+      "id": "mug-001",
+      "name": "Stoneware Coffee Mug",
+      "price": 800,
+      "currency": "INR",
+      "category": "mug",
+      "color": "white",
+      "description": "Premium ceramic coffee mug with ergonomic handle",
+      "image": "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=400"
+    },
+    {
+      "id": "mug-002",
+      "name": "Glass Coffee Mug",
+      "price": 600,
+      "currency": "INR",
+      "category": "mug",
+      "color": "clear",
+      "description": "Transparent borosilicate glass mug",
+      "image": "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=400"
+    },
+    {
+      "id": "mug-003",
+      "name": "Travel Mug",
+      "price": 950,
+      "currency": "INR",
+      "category": "mug",
+      "color": "black",
+      "description": "Insulated stainless steel travel mug",
+      "image": "https://images.unsplash.com/photo-1534349762230-e0cadf78f5da?w=400"
+    },
+    {
+      "id": "mug-004",
+      "name": "Ceramic Tea Mug",
+      "price": 700,
+      "currency": "INR",
+      "category": "mug",
+      "color": "blue",
+      "description": "Handcrafted ceramic tea mug",
+      "image": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400"
+    },
+    {
+      "id": "mug-005",
+      "name": "Espresso Cup Set",
+      "price": 1200,
+      "currency": "INR",
+      "category": "mug",
+      "color": "white",
+      "description": "Set of 2 espresso cups with saucers",
+      "image": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400"
+    },
+    {
+      "id": "mug-006",
+      "name": "Bamboo Coffee Mug",
+      "price": 850,
+      "currency": "INR",
+      "category": "mug",
+      "color": "brown",
+      "description": "Eco-friendly bamboo fiber mug",
+      "image": "https://images.unsplash.com/photo-1572119865084-43c285814d63?w=400"
+    },
+    {
+      "id": "mug-007",
+      "name": "Double Wall Glass Mug",
+      "price": 900,
+      "currency": "INR",
+      "category": "mug",
+      "color": "clear",
+      "description": "Double-walled insulated glass mug",
+      "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400"
+    },
+    {
+      "id": "mug-008",
+      "name": "Vintage Enamel Mug",
+      "price": 750,
+      "currency": "INR",
+      "category": "mug",
+      "color": "red",
+      "description": "Retro enamel camping mug",
+      "image": "https://images.unsplash.com/photo-1610889556528-9a770e32642f?w=400"
+    },
+    {
+      "id": "mug-009",
+      "name": "Marble Pattern Mug",
+      "price": 880,
+      "currency": "INR",
+      "category": "mug",
+      "color": "marble",
+      "description": "Elegant marble pattern ceramic mug",
+      "image": "https://images.unsplash.com/photo-1571781418606-70265b9cce90?w=400"
+    },
+    {
+      "id": "mug-010",
+      "name": "Copper Moscow Mule Mug",
+      "price": 1100,
+      "currency": "INR",
+      "category": "mug",
+      "color": "copper",
+      "description": "Authentic copper Moscow Mule mug",
+      "image": "https://images.unsplash.com/photo-1556910110-a5a63dfd393c?w=400"
+    },
+    {
+      "id": "tshirt-001",
+      "name": "Cotton T-Shirt",
+      "price": 1200,
+      "currency": "INR",
+      "category": "clothing",
+      "color": "blue",
+      "size": "M",
+      "description": "100% cotton casual t-shirt",
+      "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400"
+    },
+    {
+      "id": "tshirt-002",
+      "name": "Premium T-Shirt",
+      "price": 1800,
+      "currency": "INR",
+      "category": "clothing",
+      "color": "black",
+      "size": "L",
+      "description": "Premium quality cotton blend t-shirt",
+      "image": "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400"
+    },
+    {
+      "id": "tshirt-003",
+      "name": "V-Neck T-Shirt",
+      "price": 1300,
+      "currency": "INR",
+      "category": "clothing",
+      "color": "white",
+      "size": "M",
+      "description": "Classic v-neck cotton t-shirt",
+      "image": "https://images.unsplash.com/photo-1622445275463-afa2ab738c34?w=400"
+    },
+    {
+      "id": "tshirt-004",
+      "name": "Polo T-Shirt",
+      "price": 1600,
+      "currency": "INR",
+      "category": "clothing",
+      "color": "navy",
+      "size": "L",
+      "description": "Stylish polo collar t-shirt",
+      "image": "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=400"
+    },
+    {
+      "id": "hoodie-001",
+      "name": "Black Hoodie",
+      "price": 2500,
+      "currency": "INR",
+      "category": "clothing",
+      "color": "black",
+      "size": "M",
+      "description": "Comfortable cotton hoodie with front pocket",
+      "image": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400"
+    },
+    {
+      "id": "hoodie-002",
+      "name": "Gray Hoodie",
+      "price": 2200,
+      "currency": "INR",
+      "category": "clothing",
+      "color": "gray",
+      "size": "L",
+      "description": "Soft fleece hoodie perfect for casual wear",
+      "image": "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=400"
+    },
+    {
+      "id": "hoodie-003",
+      "name": "Zip-Up Hoodie",
+      "price": 2600,
+      "currency": "INR",
+      "category": "clothing",
+      "color": "navy",
+      "size": "M",
+      "description": "Full zip hoodie with side pockets",
+      "image": "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=400"
+    },
+    {
+      "id": "shirt-001",
+      "name": "Formal Shirt",
+      "price": 1900,
+      "currency": "INR",
+      "category": "clothing",
+      "color": "white",
+      "size": "M",
+      "description": "Classic formal cotton shirt",
+      "image": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400"
+    },
+    {
+      "id": "shirt-002",
+      "name": "Casual Shirt",
+      "price": 1700,
+      "currency": "INR",
+      "category": "clothing",
+      "color": "blue",
+      "size": "L",
+      "description": "Comfortable casual shirt",
+      "image": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400"
+    },
+    {
+      "id": "jeans-001",
+      "name": "Slim Fit Jeans",
+      "price": 2800,
+      "currency": "INR",
+      "category": "clothing",
+      "color": "blue",
+      "size": "32",
+      "description": "Modern slim fit denim jeans",
+      "image": "https://images.unsplash.com/photo-1542272604-787c3835535d?w=400"
+    },
+    {
+      "id": "book-001",
+      "name": "Python Programming Guide",
+      "price": 1500,
+      "currency": "INR",
+      "category": "books",
+      "description": "Complete guide to Python programming for beginners",
+      "image": "https://images.unsplash.com/photo-1589998059171-988d887df646?w=400"
+    },
+    {
+      "id": "book-002",
+      "name": "AI & Machine Learning",
+      "price": 2000,
+      "currency": "INR",
+      "category": "books",
+      "description": "Comprehensive book on AI and ML concepts",
+      "image": "https://images.unsplash.com/photo-1535905557558-afc4877a26fc?w=400"
+    },
+    {
+      "id": "book-003",
+      "name": "Web Development Mastery",
+      "price": 1800,
+      "currency": "INR",
+      "category": "books",
+      "description": "Complete web development guide",
+      "image": "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400"
+    },
+    {
+      "id": "book-004",
+      "name": "Data Science Handbook",
+      "price": 2200,
+      "currency": "INR",
+      "category": "books",
+      "description": "Practical data science techniques",
+      "image": "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400"
+    },
+    {
+      "id": "book-005",
+      "name": "JavaScript Complete",
+      "price": 1600,
+      "currency": "INR",
+      "category": "books",
+      "description": "Modern JavaScript programming",
+      "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400"
+    },
+    {
+      "id": "book-006",
+      "name": "React Development",
+      "price": 1700,
+      "currency": "INR",
+      "category": "books",
+      "description": "Build modern web apps with React",
+      "image": "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400"
+    },
+    {
+      "id": "book-007",
+      "name": "Cloud Computing Guide",
+      "price": 1900,
+      "currency": "INR",
+      "category": "books",
+      "description": "AWS, Azure, and GCP essentials",
+      "image": "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=400"
+    },
+    {
+      "id": "book-008",
+      "name": "Cybersecurity Basics",
+      "price": 2100,
+      "currency": "INR",
+      "category": "books",
+      "description": "Essential cybersecurity concepts",
+      "image": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400"
+    },
+    {
+      "id": "book-009",
+      "name": "Mobile App Development",
+      "price": 1850,
+      "currency": "INR",
+      "category": "books",
+      "description": "iOS and Android development",
+      "image": "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400"
+    },
+    {
+      "id": "book-010",
+      "name": "DevOps Handbook",
+      "price": 2050,
+      "currency": "INR",
+      "category": "books",
+      "description": "Modern DevOps practices",
+      "image": "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=400"
+    },
+    {
+      "id": "phone-001",
+      "name": "Smartphone Case",
+      "price": 500,
+      "currency": "INR",
+      "category": "accessories",
+      "color": "black",
+      "description": "Protective case for smartphones",
+      "image": "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=400"
+    },
+    {
+      "id": "phone-002",
+      "name": "Phone Stand",
+      "price": 400,
+      "currency": "INR",
+      "category": "accessories",
+      "color": "silver",
+      "description": "Adjustable phone stand",
+      "image": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400"
+    },
+    {
+      "id": "charger-001",
+      "name": "Fast Charger",
+      "price": 800,
+      "currency": "INR",
+      "category": "accessories",
+      "color": "white",
+      "description": "20W fast charging adapter",
+      "image": "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=400"
+    },
+    {
+      "id": "cable-001",
+      "name": "USB-C Cable",
+      "price": 300,
+      "currency": "INR",
+      "category": "accessories",
+      "color": "black",
+      "description": "Durable USB-C charging cable",
+      "image": "https://images.unsplash.com/photo-1591290619762-d71b5e0a0e8e?w=400"
+    },
+    {
+      "id": "watch-001",
+      "name": "Smart Watch",
+      "price": 4500,
+      "currency": "INR",
+      "category": "accessories",
+      "color": "black",
+      "description": "Fitness tracking smart watch",
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"
+    },
+    {
+      "id": "bag-001",
+      "name": "Laptop Bag",
+      "price": 1500,
+      "currency": "INR",
+      "category": "accessories",
+      "color": "black",
+      "description": "Padded laptop backpack",
+      "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400"
+    },
+    {
+      "id": "wallet-001",
+      "name": "Leather Wallet",
+      "price": 900,
+      "currency": "INR",
+      "category": "accessories",
+      "color": "brown",
+      "description": "Genuine leather wallet",
+      "image": "https://images.unsplash.com/photo-1627123424574-724758594e93?w=400"
+    },
+    {
+      "id": "sunglasses-001",
+      "name": "Sunglasses",
+      "price": 1200,
+      "currency": "INR",
+      "category": "accessories",
+      "color": "black",
+      "description": "UV protection sunglasses",
+      "image": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400"
+    },
+    {
+      "id": "belt-001",
+      "name": "Leather Belt",
+      "price": 700,
+      "currency": "INR",
+      "category": "accessories",
+      "color": "black",
+      "description": "Classic leather belt",
+      "image": "https://images.unsplash.com/photo-1624222247344-550fb60583bb?w=400"
+    },
+    {
+      "id": "cap-001",
+      "name": "Baseball Cap",
+      "price": 600,
+      "currency": "INR",
+      "category": "accessories",
+      "color": "blue",
+      "description": "Adjustable baseball cap",
+      "image": "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400"
+    },
+    {
+      "id": "headphones-001",
+      "name": "Wireless Headphones",
+      "price": 3500,
+      "currency": "INR",
+      "category": "electronics",
+      "color": "black",
+      "description": "Bluetooth wireless headphones with noise cancellation",
+      "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400"
+    },
+    {
+      "id": "earbuds-001",
+      "name": "True Wireless Earbuds",
+      "price": 2500,
+      "currency": "INR",
+      "category": "electronics",
+      "color": "white",
+      "description": "Compact wireless earbuds",
+      "image": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400"
+    },
+    {
+      "id": "speaker-001",
+      "name": "Bluetooth Speaker",
+      "price": 2000,
+      "currency": "INR",
+      "category": "electronics",
+      "color": "black",
+      "description": "Portable Bluetooth speaker",
+      "image": "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400"
+    },
+    {
+      "id": "mouse-001",
+      "name": "Wireless Mouse",
+      "price": 800,
+      "currency": "INR",
+      "category": "electronics",
+      "color": "black",
+      "description": "Ergonomic wireless mouse",
+      "image": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400"
+    },
+    {
+      "id": "keyboard-001",
+      "name": "Mechanical Keyboard",
+      "price": 3000,
+      "currency": "INR",
+      "category": "electronics",
+      "color": "black",
+      "description": "RGB mechanical gaming keyboard",
+      "image": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400"
+    },
+    {
+      "id": "webcam-001",
+      "name": "HD Webcam",
+      "price": 2200,
+      "currency": "INR",
+      "category": "electronics",
+      "color": "black",
+      "description": "1080p HD webcam",
+      "image": "https://images.unsplash.com/photo-1614624532983-4ce03382d63d?w=400"
+    },
+    {
+      "id": "powerbank-001",
+      "name": "Power Bank 20000mAh",
+      "price": 1800,
+      "currency": "INR",
+      "category": "electronics",
+      "color": "black",
+      "description": "High capacity power bank",
+      "image": "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=400"
+    },
+    {
+      "id": "tablet-001",
+      "name": "Tablet 10 inch",
+      "price": 15000,
+      "currency": "INR",
+      "category": "electronics",
+      "color": "silver",
+      "description": "Android tablet with stylus",
+      "image": "https://images.unsplash.com/photo-1561154464-82e9adf32764?w=400"
+    },
+    {
+      "id": "monitor-001",
+      "name": "24 inch Monitor",
+      "price": 12000,
+      "currency": "INR",
+      "category": "electronics",
+      "color": "black",
+      "description": "Full HD LED monitor",
+      "image": "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400"
+    },
+    {
+      "id": "router-001",
+      "name": "WiFi Router",
+      "price": 2500,
+      "currency": "INR",
+      "category": "electronics",
+      "color": "white",
+      "description": "Dual-band WiFi router",
+      "image": "https://images.unsplash.com/photo-1606904825846-647eb07f5be2?w=400"
+    }
+  ]
+}

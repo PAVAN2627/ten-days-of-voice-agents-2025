@@ -1,0 +1,486 @@
+.order-tracking {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  max-height: 90vh;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tracking-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.tracking-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.tracking-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tracking-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+.tracking-loader {
+  padding: 40px;
+  text-align: center;
+  color: #667eea;
+  font-weight: 600;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.tracking-error {
+  background: #fed7d7;
+  color: #c53030;
+  padding: 16px;
+  margin: 12px;
+  border-radius: 8px;
+  border-left: 4px solid #c53030;
+}
+
+/* Order Summary */
+.order-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  background: #f7fafc;
+  border-bottom: 1px solid #e2e8f0;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.summary-section {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+  min-width: 250px;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.summary-label {
+  font-size: 0.8rem;
+  color: #a0aec0;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summary-value {
+  font-size: 0.95rem;
+  color: #4a5568;
+  font-weight: 600;
+  font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.summary-value-highlight {
+  font-size: 1.3rem;
+  color: #667eea;
+  font-weight: 700;
+}
+
+.status-section {
+  display: flex;
+  align-items: center;
+}
+
+.status-badge {
+  border: 2px solid;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* Status Timeline */
+.status-timeline {
+  padding: 24px 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.status-timeline h3 {
+  margin: 0 0 16px 0;
+  color: #1a202c;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.timeline-track {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.timeline-track::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #e2e8f0;
+  z-index: 0;
+}
+
+.timeline-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-dot {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  border: 3px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.timeline-dot.completed {
+  animation: scaleIn 0.3s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.timeline-dot.current {
+  box-shadow: 0 0 0 8px rgba(102, 126, 234, 0.2);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.timeline-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4a5568;
+  text-transform: capitalize;
+  text-align: center;
+  max-width: 80px;
+}
+
+.timeline-note {
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  border-left: 4px solid #667eea;
+  padding: 12px;
+  border-radius: 6px;
+  color: #667eea;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* Shipping Details */
+.shipping-details {
+  padding: 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.shipping-details h3,
+.order-items-detail h3 {
+  margin: 0 0 12px 0;
+  color: #1a202c;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.details-box {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.detail-row:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #718096;
+  font-size: 0.9rem;
+  min-width: 120px;
+}
+
+.detail-value {
+  color: #4a5568;
+  text-align: right;
+  font-weight: 500;
+  flex: 1;
+}
+
+.no-shipping,
+.no-items {
+  text-align: center;
+  color: #a0aec0;
+  padding: 16px;
+  margin: 0;
+}
+
+/* Order Items */
+.order-items-detail {
+  padding: 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.item-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: #f7fafc;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  gap: 12px;
+}
+
+.item-detail-row:last-child {
+  margin-bottom: 0;
+}
+
+.item-detail-info {
+  flex: 1;
+}
+
+.item-detail-name {
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 4px;
+  font-size: 0.95rem;
+}
+
+.item-detail-meta {
+  font-size: 0.85rem;
+  color: #718096;
+}
+
+.item-detail-total {
+  font-weight: 700;
+  color: #667eea;
+  white-space: nowrap;
+  font-size: 0.95rem;
+}
+
+/* Order Total */
+.order-total-detail {
+  padding: 20px;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 0.95rem;
+  color: #4a5568;
+}
+
+.total-row span:last-child {
+  font-weight: 600;
+}
+
+.total-final {
+  border-top: 2px solid #e2e8f0;
+  padding-top: 12px;
+  margin-top: 8px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #1a202c;
+}
+
+.total-final span:last-child {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Action Buttons */
+.tracking-actions {
+  display: flex;
+  gap: 8px;
+  padding: 16px 20px;
+  background: white;
+}
+
+.btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.btn-refresh {
+  background: #f0f4ff;
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.btn-refresh:hover {
+  background: #667eea;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.btn-close {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+}
+
+.btn-close:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .order-summary {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .summary-section {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .tracking-actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .tracking-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .status-timeline {
+    padding: 16px 12px;
+  }
+
+  .timeline-track {
+    gap: 4px;
+  }
+
+  .timeline-dot {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+
+  .timeline-label {
+    font-size: 0.75rem;
+    max-width: 60px;
+  }
+
+  .detail-label {
+    min-width: 80px;
+  }
+
+  .summary-value-highlight {
+    font-size: 1.1rem;
+  }
+
+  .total-final {
+    font-size: 1rem;
+  }
+}
